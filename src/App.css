@@ -9,25 +9,9 @@
   grid-template-columns: 2fr 10fr;
   /*grid-gap: 10px;*/
 }
-.header {
-  grid-area: h;
-  background-color: #6eecc6; 
-}
-.header img {
-  width: 30px;
-}
-.nav {
-  grid-area: n;
-  background-color: #f0d92a; 
 
-}
-.content {
-  grid-area: c;
-  background-color: #558bee; 
-}
-.content img {
-  width: 100%;
-}
+
+
 
 /*
 .App {
