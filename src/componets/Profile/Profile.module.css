@@ -3,11 +3,7 @@
    background-color: #558bee; 
  }
  .content img {
-   width: 100%;
+   max-width: 100%;
  }
- .item {
-   color: white;
- }
- .posts {
-   margin: 5px 10px;
- }
+
+ 
