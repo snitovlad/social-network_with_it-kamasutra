@@ -1,13 +1,13 @@
 import s from './Post.module.css'
 
-function Post() {
+function Post(props) {
    return (
       
             <div className={s.item}>
-               <img src="https://pixelbox.ru/wp-content/uploads/2021/04/cats-ava-steam-8.jpg" />
-               post1
+               <img src={props.avatar} />
+               {props.message}
                <div>
-                  <span>like</span>
+                  <span>{props.like}</span>
                </div>
             </div>
             
