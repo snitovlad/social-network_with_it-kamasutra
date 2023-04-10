@@ -7,7 +7,7 @@ function Post(props) {
                <img src={props.avatar} />
                {props.message}
                <div>
-                  <span>{props.like}</span>
+                  <span>like:  </span>{props.likeCount}
                </div>
             </div>
             
