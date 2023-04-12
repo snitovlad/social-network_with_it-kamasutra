@@ -10,20 +10,18 @@ import Setting from './componets/Setting/Setting';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter> {/*это можно вынести в index.js <React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode> */}
       <div className="app-wrapper">
         <Header />
         <Navbar />
 
         <div className="app-wrapper-content">
           <Routes>
-            <Route path="/" element={<Profile />} />
-            <Route path="/dialogs" element={<Dialogs />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/dialogs/*" element={<Dialogs />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/news" element={<News />} />
             <Route path="/music" element={<Music />} />
             <Route path="/setting" element={<Setting />} />
-
-            <Route path="*" exact element={<Profile />} /> {/*для пути по дефолту если страница не найдена*/}
           </Routes>
         </div>
       </div>
