@@ -1,0 +1,20 @@
+.dialog img {
+   width: 30px;
+   height: 30px;
+   border-radius: 50%;
+   border: 2px solid rgb(177, 234, 32);
+}
+
+.dialog a {
+   text-decoration: none;
+   color: #602102;
+   font-weight: 700;
+}
+
+.nameLink {
+   margin: 0 0 0 10px;
+}
+
+.dialog {
+   margin: 0 0 10px 0;
+}

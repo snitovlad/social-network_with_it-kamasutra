@@ -7,21 +7,23 @@ import Navbar from './componets/Navbar/Navbar';
 import News from './componets/News/News';
 import Profile from './componets/Profile/Profile';
 import Setting from './componets/Setting/Setting';
+import FriendsPage from './componets/FriendsPage/FriendsPage';
 
 function App(props) {
   return (
     <BrowserRouter> {/*это можно вынести в index.js <React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode> */}
       <div className="app-wrapper">
         <Header />
-        <Navbar />
+        <Navbar state={props.state.sidebar}/>
 
         <div className="app-wrapper-content">
           <Routes>
-            <Route path="/profile" element={<Profile posts={props.posts}/>} />
-            <Route path="/dialogs/*" element={<Dialogs dialogs={props.dialogs} messages={props.messages}/>} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
+            <Route path="/profile" element={<Profile state={props.state.profilePage}/>} />  {/*Вместо posts={props.posts} можно {...props} */}
+            <Route path="/dialogs/*" element={<Dialogs state={props.state.dialogsPage}/>} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/news" element={<News />} />
             <Route path="/music" element={<Music />} />
             <Route path="/setting" element={<Setting />} />
+            <Route path="/friends" element={<FriendsPage />} />
           </Routes>
         </div>
       </div>

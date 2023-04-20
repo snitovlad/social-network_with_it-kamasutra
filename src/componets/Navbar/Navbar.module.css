@@ -15,3 +15,15 @@
    color: #026e4e;
    font-weight: 700;
  }
+ .friends {
+  margin: 50px 0 0 0;
+ }
+ .friends a {
+  font-size: 30px;
+
+ }
+ .friendsPersons {
+  display: flex;
+  justify-content: space-between;
+  
+ }

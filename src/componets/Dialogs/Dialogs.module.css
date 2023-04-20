@@ -5,13 +5,7 @@
 .dialogsItems {
    padding: 10px;
 }
-.dialogsItems .active a{
-   color: #f0d92a;
-   font-weight: 700;
-}
-.dialogsItems .dialog a {
-   text-decoration: none;
-}
+
 .messages {
    padding: 10px;
 }
