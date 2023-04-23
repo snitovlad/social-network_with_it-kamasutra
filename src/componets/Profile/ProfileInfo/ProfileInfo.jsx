@@ -4,7 +4,7 @@ function ProfileInfo() {
    return (
       <div>
          <div className={s.imageProfile}>
-            <img src='https://cdn.pixabay.com/photo/2018/04/16/16/16/sunset-3325080_1280.jpg' />
+            <img src='https://cdn.pixabay.com/photo/2018/04/16/16/16/sunset-3325080_1280.jpg' alt="img"/>
          </div>
          <div className={s.descriptionBlock}>
             Ava + description

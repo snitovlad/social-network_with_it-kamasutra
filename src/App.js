@@ -20,7 +20,7 @@ function App(props) {
 
         <div className="app-wrapper-content" >
           <Routes>
-            <Route path="/profile" element={<Profile state={props.state.profilePage} />} />  {/*Вместо posts={props.posts} можно {...props} */}
+            <Route path="/profile" element={<Profile state={props.state.profilePage} addPost={props.addPost} />} />  {/*Вместо posts={props.posts} можно {...props} */}
             <Route path="/dialogs/*" element={<Dialogs state={props.state.dialogsPage} />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/news" element={<News />} />
             <Route path="/music" element={<Music />} />
