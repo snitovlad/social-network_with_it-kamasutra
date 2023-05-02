@@ -1,4 +1,4 @@
-import s from './Setting.module.css'
+//import s from './Setting.module.css'
 
 const Setting = () => {
    return (        
