@@ -8,7 +8,7 @@ const Friends = (props) => {
             <div className={s.friendsAvatar}>
             </div>
             <div className={s.friendsName}>
-              {props.name}
+              { props.name }
             </div>
           </div>
   );
