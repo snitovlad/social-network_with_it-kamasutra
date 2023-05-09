@@ -22,8 +22,7 @@ function App(props) {
           <Routes>
             <Route path="/profile" element={<Profile profilePage={props.state.profilePage} 
                                   dispatch={props.dispatch} />} />  {/*Вместо posts={props.posts} можно {...props} */}
-            <Route path="/dialogs/*" element={<Dialogs state={props.state.dialogsPage} 
-                                  dispatch={props.dispatch} />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
+            <Route path="/dialogs/*" element={<Dialogs store={props.store} />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/news" element={<News />} />
             <Route path="/music" element={<Music />} />
             <Route path="/setting" element={<Setting />} />
