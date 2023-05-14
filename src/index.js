@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import store from './Redux/state';
+import store from './Redux/redux-store';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,7 +18,11 @@ let rerenderEntireTree = (state) => {
 
 rerenderEntireTree(store.getState());
 
-store.subscribe(rerenderEntireTree);
+//store.subscribe(rerenderEntireTree);  //т.к. нужно взять где-то state, а redux не отдает его автоматически
+store.subscribe( () => {  //т.к. в редаксовском store ф-ция _callSubscriber не передает state
+  let state = store.getState();
+  rerenderEntireTree(state);
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
