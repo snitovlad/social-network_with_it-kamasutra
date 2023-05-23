@@ -8,6 +8,7 @@ import News from './componets/News/News';
 import Profile from './componets/Profile/Profile';
 import Setting from './componets/Setting/Setting';
 import FriendsPage from './componets/FriendsPage/FriendsPage';
+import DialogsContainer from './componets/Dialogs/DialogsContainer';
 
 
 function App(props) {
@@ -20,9 +21,8 @@ function App(props) {
 
         <div className="app-wrapper-content" >
           <Routes>
-            <Route path="/profile" element={<Profile profilePage={props.state.profilePage} 
-                                  dispatch={props.dispatch} />} />  {/*Вместо posts={props.posts} можно {...props} */}
-            <Route path="/dialogs/*" element={<Dialogs store={props.store} />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
+            <Route path="/profile" element={<Profile store={props.store} />} />  {/*Вместо posts={props.posts} можно {...props} */}
+            <Route path="/dialogs/*" element={<DialogsContainer store={props.store} />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/news" element={<News />} />
             <Route path="/music" element={<Music />} />
             <Route path="/setting" element={<Setting />} />

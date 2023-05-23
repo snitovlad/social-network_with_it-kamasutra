@@ -1,13 +1,11 @@
 import DialogItem from './DialogItem/DialogItem';
 import s from './Dialogs.module.css'
 import Message from './Message/Message';
-import { sendMessageCreator, updateNewMessageBodyCreator } from '../../Redux/dialogs-reducer';
 
 
 const Dialogs = (props) => {
 
-   let state = props.store.getState().dialogsPage; //создали локальный state
-
+   let state = props.dialogsPage; //создали локальный state
 
    let dialogsElement = state.dialogs.map(dial => <DialogItem key={dial.id} id={dial.id} name={dial.name} avatar={dial.avatar} />)
    let messagesElement = state.messages.map(mess => <Message key={mess.id} id={mess.id} message={mess.message} />)
@@ -16,14 +14,15 @@ const Dialogs = (props) => {
 
    let onSendMessageClick = () => {
       //let text = newMessageElement.current.value;      так было с ref
-      props.store.dispatch(sendMessageCreator())
+      props.sendMessage(); //sendMessage - просто какая-то callback ф-ция
    }
 
    let newMessageBody = state.newMessageBody; //наше значение для value
 
    let onNewMessageChange = (event) => {
       let body = event.target.value;  //событие event произошло с объектом target (это наш textarea) и берем у него value
-      props.store.dispatch(updateNewMessageBodyCreator(body));
+      //props.store.dispatch(updateNewMessageBodyCreator(body));
+      props.updateNewMessageBody(body); //updateNewMessageBody - просто какая-то callback ф-ция
    }
 
 
