@@ -1,6 +1,5 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import Dialogs from './componets/Dialogs/Dialogs';
 import Header from './componets/Header/Header';
 import Music from './componets/Music/Music';
 import Navbar from './componets/Navbar/Navbar';
@@ -13,16 +12,16 @@ import DialogsContainer from './componets/Dialogs/DialogsContainer';
 
 function App(props) {
   return (
-    <BrowserRouter> {/*это можно вынести в index.js <React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode> */}
+    // <BrowserRouter> { /*это можно вынести в index.js <React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode> */}
       < div className="app-wrapper" >
 
         <Header />
-        <Navbar state={props.state.sidebar} />
+        <Navbar /*state={props.state.sidebar}*/ /> 
 
         <div className="app-wrapper-content" >
           <Routes>
-            <Route path="/profile" element={<Profile store={props.store} />} />  {/*Вместо posts={props.posts} можно {...props} */}
-            <Route path="/dialogs/*" element={<DialogsContainer store={props.store} />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
+            <Route path="/profile" element={<Profile /*store={props.store}*/ />} />  {/*Вместо posts={props.posts} можно {...props} */}
+            <Route path="/dialogs/*" element={<DialogsContainer /*store={props.store}*/ />} />  {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/news" element={<News />} />
             <Route path="/music" element={<Music />} />
             <Route path="/setting" element={<Setting />} />
@@ -30,7 +29,7 @@ function App(props) {
           </Routes>
         </div>
       </div >
-      </BrowserRouter>
+      //</BrowserRouter>
   );
 }
 
