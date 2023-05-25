@@ -5,7 +5,7 @@ import './index.css';
 import App from './App';
 import store from './Redux/redux-store';
 import { BrowserRouter } from 'react-router-dom';
-import StoreContext, { Provider } from './StoreContext';
+import  { Provider } from 'react-redux';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -14,7 +14,7 @@ let rerenderEntireTree = (state) => {
   root.render(
     <React.StrictMode>
       <BrowserRouter>
-        <Provider store={store}>
+        <Provider store={store}>  {/*это котекстная компонента, к-рая передает store всем дочерним компонентам App */}
           {/*<StoreContext.Provider value={store}> мы это все инкапсулировали в Provider*/} 
           <App state={state} /*dispatch={store.dispatch.bind(store)} store={store}*/ />
           {/*</StoreContext.Provider>*/}

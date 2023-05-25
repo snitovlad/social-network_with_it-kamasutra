@@ -8,6 +8,7 @@ import Profile from './componets/Profile/Profile';
 import Setting from './componets/Setting/Setting';
 import FriendsPage from './componets/FriendsPage/FriendsPage';
 import DialogsContainer from './componets/Dialogs/DialogsContainer';
+import NavbarContainer from './componets/Navbar/NavbarContainer';
 
 
 function App(props) {
@@ -16,7 +17,7 @@ function App(props) {
       < div className="app-wrapper" >
 
         <Header />
-        <Navbar /*state={props.state.sidebar}*/ /> 
+        <NavbarContainer /*state={props.state.sidebar}*/ /> 
 
         <div className="app-wrapper-content" >
           <Routes>

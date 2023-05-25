@@ -1,7 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import s from './Navbar.module.css'
-import Friends from './Friends/Friends';
-import StoreContext from '../../StoreContext';
 
 //Это переменная для класса .active для className в NavLink
 const activeLink = ({ isActive }) => isActive ? s.active : s.item; //здесь вызов класса className={activeLink}
@@ -15,13 +13,6 @@ const activeLink = ({ isActive }) => isActive ? s.active : s.item; //здесь 
 //className={classActive => classActive.isActive ? s.active : s.item}  //или просто так вставить в NavLink
 
 const Navbar = (props) => {
-
-  return (
-    <StoreContext.Consumer>{   // >{ должно быть без пробела или { с новой строки
-      (store) => {
-        let state = store.getState().sidebar;
-        let friendsPerson = state.friends.map(fri => <Friends key={fri.id} id={fri.id} name={fri.name} />)
-        //let friendsPerson = props.state.friends.map(fri => <Friends key={fri.id} id={fri.id} name={fri.name} />)
 
         return (
 
@@ -44,15 +35,12 @@ const Navbar = (props) => {
             <div className={s.item + ' ' + s.friends}>
               <NavLink to="/friends" className={activeLink}>Friends</NavLink>
               <div className={s.friendsPersons}>
-                {friendsPerson}
+                {props.friendsPerson}
               </div>
             </div>
           </nav>
         );
       }
-    }
-    </StoreContext.Consumer>
-  )
-}
+ 
 
 export default Navbar;
