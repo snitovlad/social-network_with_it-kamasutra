@@ -14,21 +14,26 @@ newPostText: 'it-kamasutra.com'
 const profileReducer = (state = initialState, action) => {
    switch(action.type) {
 
-      case ADD_POST:
+      case ADD_POST: {
+
          let newPost = {
             id: 4,
             message: state.newPostText,
             likeCount: 0,
             avatar: 'http://',
          };
-         state.posts.push(newPost);
-         state.newPostText = "";  //зануляем поле ввода
-         return state;
+         let stateCopy = {...state};
+         stateCopy.posts = [...state.posts]
+         stateCopy.posts.push(newPost);
+         stateCopy.newPostText = "";  //зануляем поле ввода
+         return stateCopy;
+      }
 
-      case UPDATE_NEW_POST_TEXT:
-         state.newPostText = action.newText;
-         return state;
-
+      case UPDATE_NEW_POST_TEXT: {
+         let stateCopy = {...state};
+         stateCopy.newPostText = action.newText;
+         return stateCopy;
+      }
       default:
          return state;
    }   
