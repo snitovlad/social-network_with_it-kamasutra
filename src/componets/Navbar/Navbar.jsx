@@ -14,33 +14,36 @@ const activeLink = ({ isActive }) => isActive ? s.active : s.item; //здесь 
 
 const Navbar = (props) => {
 
-        return (
+  return (
 
-          <nav className={s.nav}>
-            <div className={`${s.item} ${s.active}`}>
-              <NavLink to="/profile" className={activeLink}>Profile</NavLink>
-            </div>
-            <div className={s.item}>
-              <NavLink to="/dialogs" className={activeLink}>Messages</NavLink>
-            </div>
-            <div className={s.item}>
-              <NavLink to="/news" className={activeLink}>News</NavLink>
-            </div>
-            <div className={s.item}>
-              <NavLink to="/music" className={activeLink}>Music</NavLink>
-            </div>
-            <div className={s.item}>
-              <NavLink to="/setting" className={activeLink}>Setting</NavLink>
-            </div>
-            <div className={s.item + ' ' + s.friends}>
-              <NavLink to="/friends" className={activeLink}>Friends</NavLink>
-              <div className={s.friendsPersons}>
-                {props.friendsPerson}
-              </div>
-            </div>
-          </nav>
-        );
-      }
- 
+    <nav className={s.nav}>
+      <div className={`${s.item} ${s.active}`}>
+        <NavLink to="/profile" className={activeLink}>Profile</NavLink>
+      </div>
+      <div className={s.item}>
+        <NavLink to="/dialogs" className={activeLink}>Messages</NavLink>
+      </div>
+      <div className={s.item}>
+        <NavLink to="/users" className={activeLink}>Users</NavLink>
+      </div>
+      <div className={s.item}>
+        <NavLink to="/news" className={activeLink}>News</NavLink>
+      </div>
+      <div className={s.item}>
+        <NavLink to="/music" className={activeLink}>Music</NavLink>
+      </div>
+      <div className={s.item}>
+        <NavLink to="/setting" className={activeLink}>Setting</NavLink>
+      </div>
+      <div className={s.item + ' ' + s.friends}>
+        <NavLink to="/friends" className={activeLink}>Friends</NavLink>
+        <div className={s.friendsPersons}>
+          {props.friendsPerson}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
 
 export default Navbar;

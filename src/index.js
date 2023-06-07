@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 //let rerenderEntireTree = (state) => {
   root.render(
-    <React.StrictMode>
+    //<React.StrictMode>
       <BrowserRouter>
         <Provider store={store}>  {/*это котекстная компонента, к-рая передает store всем дочерним компонентам App */}
           {/*<StoreContext.Provider value={store}> мы это все инкапсулировали в Provider*/} 
@@ -20,7 +20,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
           {/*</StoreContext.Provider>*/}
         </Provider>
       </BrowserRouter>
-    </React.StrictMode>
+    //</React.StrictMode>
   );
 //}
 
