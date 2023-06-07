@@ -1,25 +1,30 @@
+import axios from 'axios'
 import styles from './Users.module.css'
+import userPhoto from '../../assets/images/user.png'
 
 const Users = (props) => {
 
    if (props.users.length === 0) {
+      axios.get("https://social-network.samuraijs.com/api/1.0/users").then(response => {
+         props.setUsers(response.data.items)
 
-      props.setUsers(
-         [
-            {
-               id: 1, photoUrl: 'https://klike.net/uploads/posts/2019-03/1551511808_5.jpg', followed: false, fullName: 'Dmitry K', status: 'I am looking for a job right now',
-               location: { country: 'Belarus', city: 'Minsk' }
-            },
-            {
-               id: 2, photoUrl: 'https://cspromogame.ru//storage/upload_images/avatars/1152.jpg', followed: true, fullName: 'Sasha', status: 'I am so pretty',
-               location: { country: 'Russia', city: 'Moskow' }
-            },
-            {
-               id: 3, photoUrl: 'https://cspromogame.ru//storage/upload_images/avatars/788.jpg', followed: false, fullName: 'Sergey', status: 'I like football',
-               location: { country: 'Ukraine', city: 'Kiew' }
-            }
-         ]
-      )
+      })
+         //[
+            // {
+            //    id: 1, photoUrl: 'https://klike.net/uploads/posts/2019-03/1551511808_5.jpg', followed: false, fullName: 'Dmitry K', status: 'I am looking for a job right now',
+            //    location: { country: 'Belarus', city: 'Minsk' }
+            // },
+            // {
+            //    id: 2, photoUrl: 'https://cspromogame.ru//storage/upload_images/avatars/1152.jpg', followed: true, fullName: 'Sasha', status: 'I am so pretty',
+            //    location: { country: 'Russia', city: 'Moskow' }
+            // },
+            // {
+            //    id: 3, photoUrl: 'https://cspromogame.ru//storage/upload_images/avatars/788.jpg', followed: false, fullName: 'Sergey', status: 'I like football',
+            //    location: { country: 'Ukraine', city: 'Kiew' }
+            // }
+         //]
+
+      
    }
    
    return (
@@ -27,7 +32,7 @@ const Users = (props) => {
          {props.users.map(u => <div key={u.id}>
             <span>
                <div>
-                  <img src={u.photoUrl} className={styles.userPhoto} />
+                  <img src={u.photos.small != null ? u.photos.small : userPhoto} className={styles.userPhoto} />
                </div>
                <div>
                   {u.followed ?
@@ -36,12 +41,12 @@ const Users = (props) => {
                </div>
             </span>
             <span>
-               <div>{u.fullName}</div>
+               <div>{u.name}</div>
                <div>{u.status}</div>
             </span>
             <span>
-               <div>{u.location.country}</div>
-               <div>{u.location.city}</div>
+               <div>{'u.location.country'}</div>
+               <div>{'u.location.city'}</div>
             </span>
          </div>)}
       </div>
