@@ -10,3 +10,13 @@
    height: 100px;
    border-radius: 50%;
 }
+.selectedPage {
+   font-weight: 800;
+   cursor: pointer;
+
+}
+.noSelectedPage {
+   font-weight: 400;
+   cursor: pointer;
+
+}

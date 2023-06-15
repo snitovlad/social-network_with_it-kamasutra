@@ -8,17 +8,46 @@ class Users extends React.Component {
       super(props);
    }
    componentDidMount() {
-      if (this.props.users.length === 0) { //без условия юзеры будут добавлять и повторяться
-         axios.get("https://social-network.samuraijs.com/api/1.0/users").then(response => {
+      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
+         .then(response => {
+            this.props.setUsers(response.data.items);
+            this.props.setUsersTotalCount(response.data.totalCount);
+      })
+   }
+
+   onPageChanged = (pageNumber) => {
+      this.props.setCurrentPage(pageNumber);
+      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`)
+         .then(response => {
             this.props.setUsers(response.data.items)
-         })
-      }
+      })
    }
 
    render() {
 
+      let pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize);
+      let pages = [];
+      for (let i = 1; i <= pagesCount; i++) {
+         pages.push(i)
+      }
+
+      let curPage = this.props.currentPage;
+      let curPageFirst = ((curPage - 5) < 0 ? 0 : curPage - 5)
+      let curPageLast = curPage + 5;
+      let slicedCurPage = pages.slice(curPageFirst, curPageLast)
+
+
       return (
          <div className={styles.users}>
+
+            <div>
+               {slicedCurPage.map(p => {
+                  return <span className={this.props.currentPage === p ? styles.selectedPage : styles.noSelectedPage}
+                     onClick={(event) => { this.onPageChanged(p) } } key={p}> {p} </span> 
+               })
+               }
+               <span>    всего страниц  { pagesCount }</span>
+            </div>
 
             {this.props.users.map(u => <div className={styles.user} key={u.id}>
                <span>
@@ -39,7 +68,8 @@ class Users extends React.Component {
                   <div>{'u.location.country'}</div>
                   <div>{'u.location.city'}</div>
                </span>
-            </div>)}
+            </div> )}
+
          </div>
       )
    }
