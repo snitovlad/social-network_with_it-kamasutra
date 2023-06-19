@@ -1,18 +1,20 @@
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
+const SET_USER_PROFILE = 'SET_USER_PROFILE';
 
 let initialState = {
    posts:
-   [
-      { id: 1, message: 'Hi! How are you?', likeCount: 15, avatar: 'https://pixelbox.ru/wp-content/uploads/2021/04/cats-ava-steam-8.jpg' },
-      { id: 2, message: 'It\'s my first post', likeCount: 20, avatar: 'https://pixelbox.ru/wp-content/uploads/2022/08/avatars-viber-pixelbox.ru-29.jpg' },
-      { id: 3, message: 'I\'m a sportsman. And you?', likeCount: 25, avatar: 'https://sun6-23.userapi.com/s/v1/if1/axZjentIg7fuN9JbKG3sW6Tf3uDApwUE_XzYSuMAbEMue6sJOxRQ6FtVFqqZPO_Q46Ds4ejZ.jpg?size=959x959&quality=96&crop=0,249,959,959&ava=1' }
-   ],
-newPostText: 'it-kamasutra.com'
+      [
+         { id: 1, message: 'Hi! How are you?', likeCount: 15, avatar: 'https://pixelbox.ru/wp-content/uploads/2021/04/cats-ava-steam-8.jpg' },
+         { id: 2, message: 'It\'s my first post', likeCount: 20, avatar: 'https://pixelbox.ru/wp-content/uploads/2022/08/avatars-viber-pixelbox.ru-29.jpg' },
+         { id: 3, message: 'I\'m a sportsman. And you?', likeCount: 25, avatar: 'https://sun6-23.userapi.com/s/v1/if1/axZjentIg7fuN9JbKG3sW6Tf3uDApwUE_XzYSuMAbEMue6sJOxRQ6FtVFqqZPO_Q46Ds4ejZ.jpg?size=959x959&quality=96&crop=0,249,959,959&ava=1' }
+      ],
+   newPostText: 'it-kamasutra.com',
+   profile: null
 }
 
 const profileReducer = (state = initialState, action) => {
-   switch(action.type) {
+   switch (action.type) {
 
       case ADD_POST: {
 
@@ -25,7 +27,7 @@ const profileReducer = (state = initialState, action) => {
          return {
             ...state,
             newPostText: '',
-            posts: [...state.posts, newPost]                        
+            posts: [...state.posts, newPost]
          }
       }
 
@@ -35,13 +37,19 @@ const profileReducer = (state = initialState, action) => {
             newPostText: action.newText
          };
       }
-      
+
+      case SET_USER_PROFILE: {
+         return { ...state, profile: action.profile }
+      }
+
       default:
          return state;
-   }   
+   }
 }
 
 export const addPostActionCreate = () => ({ type: ADD_POST });
 export const updateNewPostTextActionCreate = (text) => ({ type: UPDATE_NEW_POST_TEXT, newText: text });
+export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
+
 
 export default profileReducer;

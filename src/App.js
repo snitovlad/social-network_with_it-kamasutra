@@ -9,6 +9,7 @@ import FriendsPage from './componets/FriendsPage/FriendsPage';
 import DialogsContainer from './componets/Dialogs/DialogsContainer';
 import NavbarContainer from './componets/Navbar/NavbarContainer';
 import UsersContainer from './componets/Users/UsersContainer';
+import ProfileContainer from './componets/Profile/ProfileContainer';
 
 
 function App(props) {
@@ -21,7 +22,7 @@ function App(props) {
 
         <div className="app-wrapper-content" >
           <Routes>
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/*" element={<ProfileContainer />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/dialogs/*" element={<DialogsContainer />} />  {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/users" element={<UsersContainer />} />
             <Route path="/news" element={<News />} />
