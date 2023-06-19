@@ -22,7 +22,8 @@ function App(props) {
 
         <div className="app-wrapper-content" >
           <Routes>
-            <Route path="/profile/*" element={<ProfileContainer />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
+            <Route path="/profile/:userId?" element={<ProfileContainer />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
+              
             <Route path="/dialogs/*" element={<DialogsContainer />} />  {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/users" element={<UsersContainer />} />
             <Route path="/news" element={<News />} />
