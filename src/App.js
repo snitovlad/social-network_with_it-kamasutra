@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import Header from './componets/Header/Header';
 import Music from './componets/Music/Music';
 import News from './componets/News/News';
 import Profile from './componets/Profile/Profile';
@@ -10,6 +9,7 @@ import DialogsContainer from './componets/Dialogs/DialogsContainer';
 import NavbarContainer from './componets/Navbar/NavbarContainer';
 import UsersContainer from './componets/Users/UsersContainer';
 import ProfileContainer from './componets/Profile/ProfileContainer';
+import HeaderContainer from './componets/Header/HeaderContainer';
 
 
 function App(props) {
@@ -17,7 +17,7 @@ function App(props) {
     // <BrowserRouter> { /*это можно вынести в index.js <React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode> */}
       < div className="app-wrapper" >
 
-        <Header />
+        <HeaderContainer />
         <NavbarContainer /> 
 
         <div className="app-wrapper-content" >
