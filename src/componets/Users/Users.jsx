@@ -2,6 +2,7 @@ import styles from './Users.module.css'
 import userPhoto from '../../assets/images/user.png'
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
+import { usersAPI } from '../../api/api';
 
 
 let Users = (props) => {
@@ -38,29 +39,20 @@ let Users = (props) => {
                </div>
                <div>
                   {u.followed ?
+
                      <button onClick={() => {
-                        axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
-                           withCredentials: true,
-                           headers: {
-                              "API-KEY": "5208d8eb-4483-4f95-a912-098579a41e05"
-                           }
-                        }) //т.к. кроссдоменный запрос delete - то не нужен дополнительный параметр {}
-                           .then(response => {
-                              if (response.data.resultCode === 0) {
+                        usersAPI.deleteUsers(u.id)  //здесь отдельный экземпляр axios для .delete
+                           .then(data => {  //просто data вместо response, т.к. в promise вернули response.data (в api.js)
+                              if (data.resultCode === 0) {
                                  props.unfollow(u.id)
                               }
                            })
                      }}>Unfollow</button> :
 
                      <button onClick={() => {
-                        axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
-                           withCredentials: true,
-                           headers: {
-                              "API-KEY": "5208d8eb-4483-4f95-a912-098579a41e05"
-                           }
-                        }) //т.к. кроссдоменный запрос post - то нужен дополнительный параметр {}
-                           .then(response => {
-                              if (response.data.resultCode === 0) {
+                        usersAPI.postUsers(u.id)  //здесь отдельный экземпляр axios для .post
+                           .then(data => {  //просто data вместо response, т.к. в promise вернули response.data (в api.js)
+                              if (data.resultCode === 0) {
                                  props.follow(u.id)
                               }
                            })
@@ -82,3 +74,17 @@ let Users = (props) => {
 }
 
 export default Users;
+
+/*axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
+   withCredentials: true,
+   headers: {
+      "API-KEY": "5208d8eb-4483-4f95-a912-098579a41e05"
+   }
+})*/
+
+/*axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
+                           withCredentials: true,
+                           headers: {
+                              "API-KEY": "5208d8eb-4483-4f95-a912-098579a41e05"
+                           }
+                        })*/ //т.к. кроссдоменный запрос post - то нужен дополнительный параметр {}

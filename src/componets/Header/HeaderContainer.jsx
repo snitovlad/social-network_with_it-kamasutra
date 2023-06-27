@@ -2,15 +2,16 @@ import React from 'react';
 import Header from './Header';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import {setAuthUserData} from '../../Redux/auth-reducer'
+import { setAuthUserData } from '../../Redux/auth-reducer'
+import { usersAPI } from '../../api/api';
 
 class HeaderContainer extends React.Component {
    componentDidMount() {
-      axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`, {withCredentials: true}) //т.к. кроссдоменный запрос
-         .then(response => {
+      usersAPI.getAuth()  //здесь отдельный экземпляр axios для .get
+         .then(data => { //просто data вместо response, т.к. в promise вернули response.data (в api.js)
             //debugger;
-            if (response.data.resultCode === 0) {
-               let {id, login, email} = response.data.data; 
+            if (data.resultCode === 0) {  //вместо response.data просто data
+               let { id, login, email } = data.data;  //вместо response.data.data просто data.data
                this.props.setAuthUserData(id, login, email) //очередность как в actionCreator
             }
          })
@@ -27,4 +28,6 @@ const mapStateToProps = (state) => ({
    login: state.auth.login
 });
 
-export default connect(mapStateToProps, {setAuthUserData})(HeaderContainer);
+export default connect(mapStateToProps, { setAuthUserData })(HeaderContainer);
+
+//axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`, {withCredentials: true}) //т.к. кроссдоменный запрос
