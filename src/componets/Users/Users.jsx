@@ -1,7 +1,6 @@
 import styles from './Users.module.css'
 import userPhoto from '../../assets/images/user.png'
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
 import { usersAPI } from '../../api/api';
 
 
@@ -37,32 +36,41 @@ let Users = (props) => {
                      <img src={u.photos.small != null ? u.photos.small : userPhoto} className={styles.userPhoto} />
                   </NavLink>
                </div>
-               <div>
-                  {u.followed ?
 
-                     <button onClick={() => {
+               <div>
+                  {u.followed
+
+//если в массиве followingInProgress хоть одна id равна id пользователя, то тогда disabled (вернет true)
+                     ? <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => { 
+                        props.toggleFollowingProgress(true, u.id); //деактивируем кнопку после нажатия перед отправкой на сервер
                         usersAPI.deleteUsers(u.id)  //здесь отдельный экземпляр axios для .delete
                            .then(data => {  //просто data вместо response, т.к. в promise вернули response.data (в api.js)
                               if (data.resultCode === 0) {
                                  props.unfollow(u.id)
                               }
-                           })
-                     }}>Unfollow</button> :
+                              props.toggleFollowingProgress(false, u.id); //активируем кнопку после получения данных с сервера
 
-                     <button onClick={() => {
+                           })
+                     }}>Unfollow</button>
+
+                     : <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
+                        props.toggleFollowingProgress(true, u.id); //деактивируем кнопку после нажатия перед отправкой на сервер
                         usersAPI.postUsers(u.id)  //здесь отдельный экземпляр axios для .post
                            .then(data => {  //просто data вместо response, т.к. в promise вернули response.data (в api.js)
                               if (data.resultCode === 0) {
                                  props.follow(u.id)
                               }
+                              props.toggleFollowingProgress(false, u.id); //активируем кнопку после получения данных с сервера
                            })
                      }}>Follow</button>}
                </div>
             </span>
+
             <span>
                <div>{u.name}</div>
                <div>{u.status}</div>
             </span>
+            
             <span>
                <div>{'u.location.country'}</div>
                <div>{'u.location.city'}</div>
