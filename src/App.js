@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Music from './componets/Music/Music';
 import News from './componets/News/News';
-import Profile from './componets/Profile/Profile';
 import Setting from './componets/Setting/Setting';
 import FriendsPage from './componets/FriendsPage/FriendsPage';
 import DialogsContainer from './componets/Dialogs/DialogsContainer';
@@ -10,6 +9,7 @@ import NavbarContainer from './componets/Navbar/NavbarContainer';
 import UsersContainer from './componets/Users/UsersContainer';
 import ProfileContainer from './componets/Profile/ProfileContainer';
 import HeaderContainer from './componets/Header/HeaderContainer';
+import Login from './componets/Login/Login';
 
 
 function App(props) {
@@ -30,6 +30,7 @@ function App(props) {
             <Route path="/music" element={<Music />} />
             <Route path="/setting" element={<Setting />} />
             <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       </div >

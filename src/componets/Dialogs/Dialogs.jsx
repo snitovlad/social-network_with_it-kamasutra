@@ -1,3 +1,4 @@
+import { Navigate } from 'react-router-dom';
 import DialogItem from './DialogItem/DialogItem';
 import s from './Dialogs.module.css'
 import Message from './Message/Message';
@@ -25,7 +26,8 @@ const Dialogs = (props) => {
       props.updateNewMessageBody(body); //updateNewMessageBody - просто какая-то callback ф-ция
    }
 
-
+   if (!props.isAuth) return <Navigate to='/login' />  //делаем редирект страницы при отсутствии аутентификации
+   
    return (
       <div className={s.dialogs}>
 
