@@ -40,28 +40,13 @@ let Users = (props) => {
                <div>
                   {u.followed
 
-//если в массиве followingInProgress хоть одна id равна id пользователя, то тогда disabled (вернет true)
+//если в массиве followingInProgress хоть одна id равна id пользователя, то тогда disabled (вернет true). Это метод .some
                      ? <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => { 
-                        props.toggleFollowingProgress(true, u.id); //деактивируем кнопку после нажатия перед отправкой на сервер
-                        usersAPI.deleteUsers(u.id)  //здесь отдельный экземпляр axios для .delete
-                           .then(data => {  //просто data вместо response, т.к. в promise вернули response.data (в api.js)
-                              if (data.resultCode === 0) {
-                                 props.unfollow(u.id)
-                              }
-                              props.toggleFollowingProgress(false, u.id); //активируем кнопку после получения данных с сервера
-
-                           })
+                        props.unfollow(u.id)
                      }}>Unfollow</button>
 
                      : <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
-                        props.toggleFollowingProgress(true, u.id); //деактивируем кнопку после нажатия перед отправкой на сервер
-                        usersAPI.postUsers(u.id)  //здесь отдельный экземпляр axios для .post
-                           .then(data => {  //просто data вместо response, т.к. в promise вернули response.data (в api.js)
-                              if (data.resultCode === 0) {
-                                 props.follow(u.id)
-                              }
-                              props.toggleFollowingProgress(false, u.id); //активируем кнопку после получения данных с сервера
-                           })
+                        props.follow(u.id)
                      }}>Follow</button>}
                </div>
             </span>

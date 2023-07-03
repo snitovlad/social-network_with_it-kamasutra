@@ -1,3 +1,5 @@
+import { usersAPI } from "../api/api";
+
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
@@ -83,14 +85,51 @@ const usersReducer = (state = initialState, action) => {
    }
 };
 
-export const follow = (userId) => ({ type: FOLLOW, userId });
-export const unfollow = (userId) => ({ type: UNFOLLOW, userId });
-export const setUsers = (users) => ({ type: SET_USERS, users });
-export const setCurrentPage = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage });
-export const setUsersTotalCount = (totalUsersCount) => ({ type: SET_USERS_TOTAL_COUNT, count: totalUsersCount });
-export const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching });
-export const toggleFollowingProgress = (isFetching, userId) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });
+const followSuccess = (userId) => ({ type: FOLLOW, userId });  //не экспортируем, т.к. используем здесь же в users-reducer.js
+const unfollowSuccess = (userId) => ({ type: UNFOLLOW, userId });  //не экспортируем, т.к. используем здесь же в users-reducer.js
+const setUsers = (users) => ({ type: SET_USERS, users });  //не экспортируем, т.к. используем здесь же в users-reducer.js
+const setCurrentPage = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage });  //не экспортируем, т.к. используем здесь же в users-reducer.js
+const setUsersTotalCount = (totalUsersCount) => ({ type: SET_USERS_TOTAL_COUNT, count: totalUsersCount });  //не экспортируем, т.к. используем здесь же в users-reducer.js
+const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching });  //не экспортируем, т.к. используем здесь же в users-reducer.js
+const toggleFollowingProgress = (isFetching, userId) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });  //не экспортируем, т.к. используем здесь же в users-reducer.js
 
+export const getUsers = (currentPage, pageSize) => {
+   return (dispatch) => {
+      dispatch(setCurrentPage(currentPage));  //устанавливает текущую страницу пользователей
+      dispatch(toggleIsFetching(true));
+      usersAPI.getUsers(currentPage, pageSize)  //здесь отдельный экземпляр axios для .get
+         .then(data => {   //просто data вместо response, т.к. в promise вернули response.data (в api.js)
+            dispatch(toggleIsFetching(false));
+            dispatch(setUsers(data.items));
+            dispatch(setUsersTotalCount(data.totalCount));
+         })
+   }
+}
 
+export const unfollow = (usersId) => {
+   return (dispatch) => {
+      dispatch(toggleFollowingProgress(true, usersId)); //деактивируем кнопку после нажатия перед отправкой на сервер
+      usersAPI.unfollow(usersId)  //здесь отдельный экземпляр axios для .delete
+         .then(data => {  //просто data вместо response, т.к. в promise вернули response.data (в api.js)
+            if (data.resultCode === 0) {
+               dispatch(unfollowSuccess(usersId))
+            }
+            dispatch(toggleFollowingProgress(false, usersId)); //активируем кнопку после получения данных с сервера
+         })
+   }
+}
+
+export const follow = (usersId) => {
+   return (dispatch) => {
+      dispatch(toggleFollowingProgress(true, usersId)); //деактивируем кнопку после нажатия перед отправкой на сервер
+      usersAPI.follow(usersId)  //здесь отдельный экземпляр axios для .post
+         .then(response => { 
+            if (response.data.resultCode === 0) {
+               dispatch(followSuccess(usersId))
+            }
+            dispatch(toggleFollowingProgress(false, usersId)); //активируем кнопку после получения данных с сервера
+         })
+   }
+}
 
 export default usersReducer;

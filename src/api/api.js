@@ -16,15 +16,24 @@ export const usersAPI = {  //создали объект с методами д�
             return response.data;  //получилась цепочка promise
          })
    },
-   deleteUsers(id) {
-      return instance.delete(`follow/${id}`)
+
+   unfollow(usersId) {
+      return instance.delete(`follow/${usersId}`)
          .then(response => response.data);  //получилась цепочка promise
    },
-   postUsers(id) {
-      return instance.post(`follow/${id}`, {}) //не понятно надо ли {} вторым параметром
-         .then(response => response.data);  //получилась цепочка promise
+
+   follow(usersId) {
+      return instance.post(`follow/${usersId}`, {}) //не понятно надо ли {} вторым параметром (он не ставил)
    },
-   getAuth() {
+   
+   getProfile(userId) {
+      return instance.get(`profile/` + userId)
+   }
+
+}
+
+export const authAPI = {  //создали объект с методами для axios
+   me() {
       return instance.get(`auth/me`)
          .then(response => response.data);  //получилась цепочка promise
    }

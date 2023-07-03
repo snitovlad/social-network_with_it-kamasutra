@@ -2,8 +2,9 @@ import React from 'react';
 import Profile from './Profile';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { setUserProfile } from '../../Redux/profile-reducer';
+import { getUserProfile } from '../../Redux/profile-reducer';
 import { useParams } from 'react-router-dom'; //import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { usersAPI } from '../../api/api';
 
 
 export function withRouter(Component) {  //добавили вместо withRouter т.к. в 2023 уже не работает
@@ -30,14 +31,10 @@ class ProfileContainer extends React.Component {
    
    componentDidMount() {
       let userId = this.props.match.params.userId;
-      if (!userId) {  //если просто /profile без userId
+      if (!userId) {  //если вдруг просто /profile без userId
          userId = 29243;
-      }
-
-      axios.get(`https://social-network.samuraijs.com/api/1.0/profile/` + userId  )
-         .then(response => {
-            this.props.setUserProfile(response.data);
-         })
+      }     
+         this.props.getUserProfile(userId);
    }
    render() {
       return (
@@ -51,5 +48,6 @@ let mapStateToProps = (state) => ({
 })
 
 let WithUrlDataContainerComponent = withRouter(ProfileContainer) //обернули ProfileCjntainer в withRouter
-export default connect( mapStateToProps, {setUserProfile} )(WithUrlDataContainerComponent);  //все обернули в connect
+
+export default connect( mapStateToProps, {getUserProfile} )(WithUrlDataContainerComponent);  //все обернули в connect
 

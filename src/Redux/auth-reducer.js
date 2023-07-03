@@ -1,3 +1,5 @@
+import { authAPI } from "../api/api";
+
 const SET_AUTH_USER_DATA = 'SET_AUTH_USER_DATA';
 
 
@@ -23,6 +25,19 @@ const authReducer = (state = initialState, action) => {
    }
 };
 
-export const setAuthUserData = (userId, login, email) => ({ type: SET_AUTH_USER_DATA, data: {userId, login, email} });
+const setAuthUserData = (userId, login, email) => ({ type: SET_AUTH_USER_DATA, data: {userId, login, email} });
+
+export const getAuthUserData = () => {
+   return (dispatch) => {
+      authAPI.me()  //здесь отдельный экземпляр axios для .get
+         .then(data => { //просто data вместо response, т.к. в promise вернули response.data (в api.js)
+            //debugger;
+            if (data.resultCode === 0) {  //вместо response.data просто data
+               let { id, login, email } = data.data;  //вместо response.data.data просто data.data
+               dispatch(setAuthUserData(id, login, email)) //очередность как в actionCreator
+            }
+         })
+   }
+}
 
 export default authReducer;
