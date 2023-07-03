@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { follow, unfollow, getUsers } from '../../Redux/users-reducer';
 import Users from './Users';
 import Preloader from '../common/Preloader/Preloader';
+import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 
 
 class UsersContainer extends React.Component {
@@ -77,6 +78,8 @@ let mapStateToProps = (state) => {
    }
 }*/
 
-export default connect(mapStateToProps, {follow, unfollow, getUsers})(UsersContainer);
+let withRedirect = withAuthRedirect(UsersContainer);  //делаем редирект страницы если нет авторизации
+
+export default connect(mapStateToProps, {follow, unfollow, getUsers})(withRedirect);
 
 

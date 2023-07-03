@@ -2,7 +2,8 @@ import React from 'react';
 import Profile from './Profile';
 import { connect } from 'react-redux';
 import { getUserProfile } from '../../Redux/profile-reducer';
-import { Navigate, useParams } from 'react-router-dom'; //import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom'; //import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 
 
 export function withRouter(Component) {  //добавили вместо withRouter т.к. в 2023 уже не работает
@@ -36,7 +37,6 @@ class ProfileContainer extends React.Component {
    }
    render() {
 
-      if (!this.props.isAuth) return <Navigate to='/login' />  //делаем редирект страницы при отсутствии аутентификации
 
       return (
          <Profile {...this.props} profile={this.props.profile} />
@@ -44,12 +44,17 @@ class ProfileContainer extends React.Component {
    }
 }
 
+let AuthRedirectComponent = withAuthRedirect(ProfileContainer)  //делаем редирект страницы если нет авторизации
+
+  
+
+
+
 let mapStateToProps = (state) => ({
    profile: state.profilePage.profile,
-   isAuth: state.auth.isAuth
 })
 
-let WithUrlDataContainerComponent = withRouter(ProfileContainer) //обернули ProfileContainer в withRouter
+let WithUrlDataContainerComponent = withRouter(AuthRedirectComponent) //обернули ProfileContainer в withRouter
 
 export default connect( mapStateToProps, {getUserProfile} )(WithUrlDataContainerComponent);  //все обернули в connect
 

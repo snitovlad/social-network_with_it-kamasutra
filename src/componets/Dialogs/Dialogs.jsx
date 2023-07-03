@@ -25,8 +25,6 @@ const Dialogs = (props) => {
       //props.store.dispatch(updateNewMessageBodyCreator(body));
       props.updateNewMessageBody(body); //updateNewMessageBody - просто какая-то callback ф-ция
    }
-
-   if (!props.isAuth) return <Navigate to='/login' />  //делаем редирект страницы при отсутствии аутентификации
    
    return (
       <div className={s.dialogs}>
