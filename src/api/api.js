@@ -4,7 +4,7 @@ const instance = axios.create({  //создали отдельный экзем�
    withCredentials: true,  //не понятно, надо ли и как {} вторым параметром для post
    baseURL: 'https://social-network.samuraijs.com/api/1.0/',
    headers: {
-      "API-KEY": "5208d8eb-4483-4f95-a912-098579a41e05"  //нужно для .delete и .post
+      "API-KEY": "8784395f-18d0-47ba-a3e5-6cbc454c63e1"  //нужно для .delete и .post
    }
 })
 

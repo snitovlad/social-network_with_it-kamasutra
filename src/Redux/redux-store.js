@@ -1,5 +1,5 @@
-import { applyMiddleware, combineReducers, legacy_createStore } from "redux";
-import  thunkMiddleware  from "redux-thunk";  //можно просто thunk вместо thunkMiddleware
+import { applyMiddleware, combineReducers, legacy_createStore, compose } from "redux";
+import thunkMiddleware from "redux-thunk";  //можно просто thunk вместо thunkMiddleware
 import profileReducer from "./profile-reducer";
 import dialogsReducer from "./dialogs-reducer";
 import sidebarReducer from "./sidebar-reducer";
@@ -14,7 +14,9 @@ let reducers = combineReducers({
    auth: authReducer
 })
 
-let store = legacy_createStore(reducers, applyMiddleware(thunkMiddleware));  //можно просто thunk вместо thunkMiddleware
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; //это включает расширение для хрома для redux
+
+let store = legacy_createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));  //можно просто thunk вместо thunkMiddleware
 
 export default store;
-window.store=store;
+window.store = store;

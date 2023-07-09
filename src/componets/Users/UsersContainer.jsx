@@ -4,6 +4,7 @@ import { follow, unfollow, getUsers } from '../../Redux/users-reducer';
 import Users from './Users';
 import Preloader from '../common/Preloader/Preloader';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
+import { compose } from 'redux';
 
 
 class UsersContainer extends React.Component {
@@ -18,18 +19,18 @@ class UsersContainer extends React.Component {
       this.props.getUsers(pageNumber, this.props.pageSize);
 
 
-     /* this.props.setCurrentPage(pageNumber);
-      this.props.toggleIsFetching(true);
-      usersAPI.getUsers(pageNumber, this.props.pageSize)  //здесь отдельный экземпляр axios для .get
-         .then(data => {      //просто data вместо response, т.к. в promise вернули response.data (в api.js)
-            this.props.toggleIsFetching(false);
-            this.props.setUsers(data.items)
-         })*/
+      /* this.props.setCurrentPage(pageNumber);
+       this.props.toggleIsFetching(true);
+       usersAPI.getUsers(pageNumber, this.props.pageSize)  //здесь отдельный экземпляр axios для .get
+          .then(data => {      //просто data вместо response, т.к. в promise вернули response.data (в api.js)
+             this.props.toggleIsFetching(false);
+             this.props.setUsers(data.items)
+          })*/
    }
 
    render() {
       return <>
-         {this.props.isFetching ? <Preloader /> : null }
+         {this.props.isFetching ? <Preloader /> : null}
          <Users
             users={this.props.users}
             currentPage={this.props.currentPage}
@@ -78,8 +79,13 @@ let mapStateToProps = (state) => {
    }
 }*/
 
-let withRedirect = withAuthRedirect(UsersContainer);  //делаем редирект страницы если нет авторизации
+//let withRedirect = withAuthRedirect(UsersContainer);  //делаем редирект страницы если нет авторизации
 
-export default connect(mapStateToProps, {follow, unfollow, getUsers})(withRedirect);
+//export default connect(mapStateToProps, {follow, unfollow, getUsers})(withRedirect);
+
+export default compose(
+   withAuthRedirect,
+   connect(mapStateToProps, { follow, unfollow, getUsers })
+)(UsersContainer)
 
 
