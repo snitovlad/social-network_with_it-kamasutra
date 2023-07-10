@@ -1,5 +1,6 @@
 import Preloader from '../../common/Preloader/Preloader';
 import s from './ProfileInfo.module.css'
+import ProfileStatus from './ProfileStatus';
 
 let ProfileInfo = (props) => {
 
@@ -10,14 +11,16 @@ let ProfileInfo = (props) => {
    return (
       <div>
 
-         <div className={s.imageProfile}>  {/*это наша заставка*/}
+         {/* <div className={s.imageProfile}>  
             <img src='https://cdn.pixabay.com/photo/2018/04/16/16/16/sunset-3325080_1280.jpg' alt="img"/>
-         </div>
+         </div> */}
 
-         <div className={s.descriptionBlock}>
-            
+         <div className={s.descriptionBlock}>            
             <img src={props.profile.photos.large} alt="photo" />
             <div>Полное имя: {props.profile.fullName}</div>
+            <div>!</div>
+            <ProfileStatus status={'Hello my friends'} />
+            <div>!</div>
             <div>Обо мне: {props.profile.aboutMe}</div>
             <div>Контакты: {props.profile.contacts.facebook}</div>
             <div>Контакты: {props.profile.contacts.vk}</div>

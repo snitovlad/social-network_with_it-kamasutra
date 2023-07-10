@@ -45,6 +45,6 @@ let mapStateToProps = (state) => ({
 export default compose(
    connect( mapStateToProps, {getUserProfile} ),
    withRouter, //создали отдельный HOC
-   withAuthRedirect //тоже hoc
+   //withAuthRedirect //тоже hoc
 )(ProfileContainer)
 
