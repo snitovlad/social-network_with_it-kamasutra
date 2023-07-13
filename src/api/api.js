@@ -27,9 +27,21 @@ export const usersAPI = {  //создали объект с методами д�
    },
    
    getProfile(userId) {
-      return instance.get(`profile/` + userId)
+      return profileAPI.getProfile(userId) //делегировали, чтобы не дублировался код ниже, т.к. перенесли
    }
 
+}
+
+export const profileAPI = {
+   getProfile(userId) {
+      return instance.get(`profile/` + userId);
+   },
+   getStatus(userId) {
+      return instance.get(`profile/status/` + userId);
+   },
+   updateStatus(status) {
+      return instance.put(`profile/status/`, {status: status})
+   }
 }
 
 export const authAPI = {  //создали объект с методами для axios
