@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { sendMessageCreator, updateNewMessageBodyCreator } from '../../Redux/dialogs-reducer';
+import { sendMessageCreator } from '../../Redux/dialogs-reducer';
 import Dialogs from './Dialogs';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import { compose } from 'redux';
@@ -11,16 +11,10 @@ let mapStateToProps = (state) => {
    }
 }
 
-//let AuthRedirectComponent = withAuthRedirect(Dialogs);  //делаем редирект страницы если нет авторизации
-
-
 let mapDispatchToProps = (dispatch) => {
    return {
-      updateNewMessageBody: (body) => {
-         dispatch(updateNewMessageBodyCreator(body))
-      },
-      sendMessage: () => {
-         dispatch(sendMessageCreator())
+      sendMessage: (newMessageBody) => {
+         dispatch(sendMessageCreator(newMessageBody))
       }
    }
 }

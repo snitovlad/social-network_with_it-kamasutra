@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import AddMessageForm from './Message/AddMessageForm';
 import DialogItem from './DialogItem/DialogItem';
 import s from './Dialogs.module.css'
 import Message from './Message/Message';
@@ -11,21 +11,6 @@ const Dialogs = (props) => {
    let dialogsElement = state.dialogs.map(dial => <DialogItem key={dial.id} id={dial.id} name={dial.name} avatar={dial.avatar} />)
    let messagesElement = state.messages.map(mess => <Message key={mess.id} id={mess.id} message={mess.message} />)
 
-   //let newMessageElement = createRef(); будем избегать использовать ref
-
-   let onSendMessageClick = () => {
-      //let text = newMessageElement.current.value;      так было с ref
-      props.sendMessage(); //sendMessage - просто какая-то callback ф-ция
-   }
-
-   let newMessageBody = state.newMessageBody; //наше значение для value
-
-   let onNewMessageChange = (event) => {
-      let body = event.target.value;  //событие event произошло с объектом target (это наш textarea) и берем у него value
-      //props.store.dispatch(updateNewMessageBodyCreator(body));
-      props.updateNewMessageBody(body); //updateNewMessageBody - просто какая-то callback ф-ция
-   }
-   
    return (
       <div className={s.dialogs}>
 
@@ -35,19 +20,16 @@ const Dialogs = (props) => {
 
          <div className={s.messages}>
             <div>{messagesElement}</div>
-            <div>
-               <div>
-                  <textarea onChange={onNewMessageChange}
-                     value={newMessageBody} placeholder='Enter your message' name="" id="" cols="30" rows="4"></textarea>
-               </div>
-               <div>
-                  <button onClick={onSendMessageClick}>Send</button>
-               </div>
-            </div>
+
+            <AddMessageForm sendMessage={props.sendMessage}/>
+
          </div>
 
       </div>
    );
 }
+
+
+
 
 export default Dialogs;

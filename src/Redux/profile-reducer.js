@@ -2,7 +2,6 @@ import { profileAPI, usersAPI } from "../api/api";
 
 
 const ADD_POST = 'ADD-POST';
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 
@@ -13,7 +12,6 @@ let initialState = {
          { id: 2, message: 'It\'s my first post', likeCount: 20, avatar: 'https://pixelbox.ru/wp-content/uploads/2022/08/avatars-viber-pixelbox.ru-29.jpg' },
          { id: 3, message: 'I\'m a sportsman. And you?', likeCount: 25, avatar: 'https://sun6-23.userapi.com/s/v1/if1/axZjentIg7fuN9JbKG3sW6Tf3uDApwUE_XzYSuMAbEMue6sJOxRQ6FtVFqqZPO_Q46Ds4ejZ.jpg?size=959x959&quality=96&crop=0,249,959,959&ava=1' }
       ],
-   newPostText: 'it-kamasutra.com',
    profile: null,
    status: 'initial status'
 }
@@ -25,7 +23,7 @@ const profileReducer = (state = initialState, action) => {
 
          let newPost = {
             id: 4,
-            message: state.newPostText,
+            message: action.newPostText,
             likeCount: 0,
             avatar: 'http://',
          };
@@ -34,13 +32,6 @@ const profileReducer = (state = initialState, action) => {
             newPostText: '',
             posts: [...state.posts, newPost]
          }
-      }
-
-      case UPDATE_NEW_POST_TEXT: {
-         return {
-            ...state,
-            newPostText: action.newText
-         };
       }
 
       case SET_USER_PROFILE: {
@@ -56,8 +47,7 @@ const profileReducer = (state = initialState, action) => {
    }
 }
 
-export const addPostActionCreate = () => ({ type: ADD_POST });
-export const updateNewPostTextActionCreate = (text) => ({ type: UPDATE_NEW_POST_TEXT, newText: text });
+export const addPostActionCreate = (newPostText) => ({ type: ADD_POST, newPostText });
 const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
 const setStatus = (status) => ({ type: SET_STATUS, status });
 
@@ -83,10 +73,5 @@ export const updateStatus = (status) => (dispatch) => {
          }
       })
 }
-
-
-
-
-
 
 export default profileReducer;
