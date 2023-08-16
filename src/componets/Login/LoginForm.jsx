@@ -1,7 +1,14 @@
 import { Formik } from "formik";
+import styles from '../common/FormsControl/FormsControl.module.css'
+import {  validationLogin } from "../../utils/validators/validator";
 
 
 const LoginForm = () => {
+
+   let maxLength = 4;
+   let newValue = `login`;
+   let validationPassword = `password`;
+
    return (
    <div>
       <Formik
@@ -10,6 +17,7 @@ const LoginForm = () => {
             password: '',
             checkbox: '',
          }}
+         validate={(values) => validationLogin(values, maxLength, newValue, validationPassword)}
          onSubmit={(values, { setSubmitting }) => {
             setTimeout(() => {
               alert(JSON.stringify(values, null, 2));
@@ -18,9 +26,11 @@ const LoginForm = () => {
           }}
       >
 
-         {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+         {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
             <form onSubmit={handleSubmit}>
-               <p>
+               <p className={errors.login && touched.login
+                     ? styles.formControl + ' ' + styles.error
+                     : ''}>
                <input
                   type="text"
                   name="login"
@@ -30,9 +40,16 @@ const LoginForm = () => {
                   placeholder="Login"
                />
                </p>
-               <p>
+
+               <div className={styles.formControl + ' ' + styles.error}>
+                     {errors.login && touched.login && errors.login}
+                  </div>
+
+               <p className={errors.password && touched.password
+                     ? styles.formControl + ' ' + styles.error
+                     : ''}>
                <input
-                  type="text"
+                  type="password"
                   name="password"
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -40,6 +57,10 @@ const LoginForm = () => {
                   placeholder="Password"
                />
                </p>
+
+               <div className={styles.formControl + ' ' + styles.error}>
+                     {errors.password && touched.password && errors.password}
+                  </div>
 
                <p>
                <input
