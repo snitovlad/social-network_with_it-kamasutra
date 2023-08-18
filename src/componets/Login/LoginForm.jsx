@@ -3,46 +3,54 @@ import styles from '../common/FormsControl/FormsControl.module.css'
 import {  validationLogin } from "../../utils/validators/validator";
 
 
-const LoginForm = () => {
+const LoginForm = (props) => {
 
-   let maxLength = 4;
-   let newValue = `login`;
+   let maxLength = 20;
+   let newValue = `email`;
    let validationPassword = `password`;
+
+   /*const submit = (values, { setSubmitting }) => {
+      setTimeout(() => {
+        alert(JSON.stringify(values, null, 2));
+        setSubmitting(false);
+      }, 400);
+    }*/
 
    return (
    <div>
       <Formik
          initialValues={{
-            login: '',
+            email: '',
             password: '',
-            checkbox: '',
+            rememberMe: '',
          }}
          validate={(values) => validationLogin(values, maxLength, newValue, validationPassword)}
-         onSubmit={(values, { setSubmitting }) => {
+         /*onSubmit={(values, { setSubmitting }) => {
             setTimeout(() => {
               alert(JSON.stringify(values, null, 2));
               setSubmitting(false);
             }, 400);
-          }}
+          }}*/
+          onSubmit={props.submit}
       >
 
          {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
             <form onSubmit={handleSubmit}>
-               <p className={errors.login && touched.login
+               <p className={errors.email && touched.email
                      ? styles.formControl + ' ' + styles.error
                      : ''}>
                <input
                   type="text"
-                  name="login"
+                  name="email"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.login}
-                  placeholder="Login"
+                  placeholder="Email"
                />
                </p>
 
                <div className={styles.formControl + ' ' + styles.error}>
-                     {errors.login && touched.login && errors.login}
+                     {errors.email && touched.email && errors.email}
                   </div>
 
                <p className={errors.password && touched.password
@@ -65,7 +73,7 @@ const LoginForm = () => {
                <p>
                <input
                   type="checkbox"
-                  name="checkbox"
+                  name="rememberMe"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.checkbox}

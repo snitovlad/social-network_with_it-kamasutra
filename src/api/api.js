@@ -4,7 +4,7 @@ const instance = axios.create({  //создали отдельный экзем�
    withCredentials: true,  //не понятно, надо ли и как {} вторым параметром для post
    baseURL: 'https://social-network.samuraijs.com/api/1.0/',
    headers: {
-      "API-KEY": "8784395f-18d0-47ba-a3e5-6cbc454c63e1"  //нужно для .delete и .post
+      "API-KEY": "760f4e50-1d38-43e0-a1cf-69f50254c676"  //нужно для .delete и .post
    }
 })
 
@@ -47,7 +47,13 @@ export const profileAPI = {
 export const authAPI = {  //создали объект с методами для axios
    me() {
       return instance.get(`auth/me`)
-         .then(response => response.data);  //получилась цепочка promise
+         //.then(response => response.data);  //получилась цепочка promise
+   },
+   login(email, password, rememberMe=false) {
+      return instance.post(`auth/login`, {email, password, rememberMe});
+   },
+   logout() {
+      return instance.delete(`auth/login`);
    }
 
 }

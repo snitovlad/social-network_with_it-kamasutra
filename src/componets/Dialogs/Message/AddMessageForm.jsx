@@ -6,7 +6,7 @@ import styles from '../../common/FormsControl/FormsControl.module.css'
 
 const AddMessageForm = (props) => {
 
-   let maxLength = 8;
+   let maxLength = 50;
    let newValue = `newMessageBody`;
 
    let addNewMessage = (values, { setSubmitting }) => {

@@ -8,7 +8,7 @@ import styles from '../../../common/FormsControl/FormsControl.module.css'
 
 const AddNewPostForm = (props) => {
 
-   let maxLength = 5;
+   let maxLength = 50;
    let newValue = `newPostText`;
 
    let onAddPost = (values, { setSubmitting }) => {
