@@ -34,7 +34,7 @@ const LoginForm = (props) => {
           onSubmit={props.submit}
       >
 
-         {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+         {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, status }) => (
             <form onSubmit={handleSubmit}>
                <p className={errors.email && touched.email
                      ? styles.formControl + ' ' + styles.error
@@ -79,6 +79,8 @@ const LoginForm = (props) => {
                   value={values.checkbox}
                /> remember me
                </p>
+
+               {status&&<div className={styles.formControl + ' ' + styles.error}>{status}</div>}
 
                <button type="submit" disabled={isSubmitting}>
                   Submit

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({  //создали отдельный экземпляр axios и настроили его
-   withCredentials: true,  //не понятно, надо ли и как {} вторым параметром для post
+   withCredentials: true,  //благодаря этому цепляется cookie с локального хоста на другой домен
    baseURL: 'https://social-network.samuraijs.com/api/1.0/',
    headers: {
       "API-KEY": "760f4e50-1d38-43e0-a1cf-69f50254c676"  //нужно для .delete и .post

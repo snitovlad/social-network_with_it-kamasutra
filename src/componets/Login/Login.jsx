@@ -7,9 +7,9 @@ import { Navigate} from 'react-router-dom';
 
 const Login = (props) => {
 
-   const submit = (values, { setSubmitting }) => {
-      props.login(values.email, values.password, values.rememberMe);
-      setSubmitting(false);
+   const submit = (values, { setSubmitting, setStatus }) => {
+      props.login(values.email, values.password, values.rememberMe, setStatus, setSubmitting);
+      setSubmitting(true);
    }
 
    if (props.isAuth) {

@@ -43,12 +43,18 @@ export const getAuthUserData = () => (dispatch) => {
 }
 
 
-export const login = (email, password, rememberMe) => (dispatch) => { //это thunkCreator для логинизации
+export const login = (email, password, rememberMe, setStatus, setSubmitting) => (dispatch) => { //это thunkCreator для логинизации
    authAPI.login(email, password, rememberMe)  //здесь отдельный экземпляр axios для .post
       .then(response => {
-         if (response.data.resultCode === 0) {
-            dispatch( getAuthUserData() )
-         }
+         if (response.data.resultCode === 0) {  //если все хорошо (мы залогинились) - 
+            dispatch( getAuthUserData() ) //опять запрашиваем запрос на аутентификацию, чтобы прошел поток получения информации обо мне
+         } else {
+            let message = response.data.messages.length > 0 //проверка если messages пустой
+                           ? response.data.messages[0]
+                           : 'Some error';
+            setStatus(message);
+         };
+         setSubmitting(false);
       });
 }
 
