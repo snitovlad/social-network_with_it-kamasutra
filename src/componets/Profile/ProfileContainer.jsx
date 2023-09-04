@@ -11,8 +11,8 @@ class ProfileContainer extends React.Component {
 
    componentDidMount() {
       debugger
-      //let userId = this.props.match.params.userId;
-      let userId = this.props.router.params.userId;
+      //let userId = this.props.match.params.userId; //было так частный случай
+      let userId = this.props.router.params.userId;  //более общий случай
 
       if (!userId) {  //если вдруг просто /profile без userId
          //userId = 29243;
@@ -41,10 +41,6 @@ let mapStateToProps = (state) => ({
    authorizedUserId: state.auth.userId,
    isAuth: state.auth.isAuth
 })
-
-//let AuthRedirectComponent = withAuthRedirect(ProfileContainer)  //делаем редирект страницы если нет авторизации
-//let WithUrlDataContainerComponent = withRouter(AuthRedirectComponent) //обернули ProfileContainer в withRouter
-//export default connect( mapStateToProps, {getUserProfile} )(WithUrlDataContainerComponent);  //все обернули в connect
 
 export default compose(
    connect(mapStateToProps, { getUserProfile, getStatus, updateStatus }),

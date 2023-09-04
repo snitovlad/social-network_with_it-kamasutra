@@ -93,11 +93,11 @@ const setUsersTotalCount = (totalUsersCount) => ({ type: SET_USERS_TOTAL_COUNT, 
 const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching });  //не экспортируем, т.к. используем здесь же в users-reducer.js
 const toggleFollowingProgress = (isFetching, userId) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });  //не экспортируем, т.к. используем здесь же в users-reducer.js
 
-export const getUsers = (currentPage, pageSize) => {
+export const requestUsers = (page, pageSize) => {
    return (dispatch) => {
-      dispatch(setCurrentPage(currentPage));  //устанавливает текущую страницу пользователей
+      dispatch(setCurrentPage(page));  //устанавливает текущую страницу пользователей
       dispatch(toggleIsFetching(true));
-      usersAPI.getUsers(currentPage, pageSize)  //здесь отдельный экземпляр axios для .get
+      usersAPI.getUsers(page, pageSize)  //здесь отдельный экземпляр axios для .get
          .then(data => {   //просто data вместо response, т.к. в promise вернули response.data (в api.js)
             dispatch(toggleIsFetching(false));
             dispatch(setUsers(data.items));
