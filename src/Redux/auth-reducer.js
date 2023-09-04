@@ -30,8 +30,7 @@ const setAuthUserData = (userId, login, email, isAuth) => ({
 });
 
 export const getAuthUserData = () => (dispatch) => {
-   authAPI.me()  //здесь отдельный экземпляр axios для .get
-      //.then(data => { //просто data вместо response, т.к. в promise вернули response.data (в api.js)
+   return authAPI.me()  // return, т.к. dispatch(getAuthUserData()) должен вернуть нам промис
       .then(response => {
          //if (data.resultCode === 0) {  //вместо response.data просто data
          if (response.data.resultCode === 0) {

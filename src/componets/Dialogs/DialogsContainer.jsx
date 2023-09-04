@@ -3,6 +3,7 @@ import { sendMessageCreator } from '../../Redux/dialogs-reducer';
 import Dialogs from './Dialogs';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import { compose } from 'redux';
+//import { withRouter } from '../../hoc/withRouter';
 
 
 let mapStateToProps = (state) => {
@@ -24,6 +25,7 @@ let mapDispatchToProps = (dispatch) => {
 //export default DialogsContainer;
 
 export default compose(
+   //withRouter,
    connect(mapStateToProps, mapDispatchToProps),
    withAuthRedirect
 )(Dialogs)

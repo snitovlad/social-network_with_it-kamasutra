@@ -1,3 +1,4 @@
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Music from './componets/Music/Music';
@@ -10,20 +11,34 @@ import UsersContainer from './componets/Users/UsersContainer';
 import ProfileContainer from './componets/Profile/ProfileContainer';
 import HeaderContainer from './componets/Header/HeaderContainer';
 import Login from './componets/Login/Login';
+import {  initializeApp } from '../src/Redux/app-reducer'
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { withRouter } from './hoc/withRouter';
+import Preloader from './componets/common/Preloader/Preloader';
 
+class App extends React.Component {
 
-function App(props) {
-  return (
-    // <BrowserRouter> { /*это можно вынести в index.js <React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode> */}
+  componentDidMount() {
+    this.props.initializeApp();
+ }
+
+  render() {
+
+    if (!this.props.initialized) { //если приложение не проинициализировано (пользователь не залогинен) - тогда крутилка
+      return <Preloader />
+    }
+
+    return (
       < div className="app-wrapper" >
 
         <HeaderContainer />
-        <NavbarContainer /> 
+        <NavbarContainer />
 
         <div className="app-wrapper-content" >
           <Routes>
-            
-            <Route path="/profile/:userId?" element={<ProfileContainer />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}              
+
+            <Route path="/profile/:userId?" element={<ProfileContainer />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/dialogs/*" element={<DialogsContainer />} />  {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
             <Route path="/users" element={<UsersContainer />} />
             <Route path="/news" element={<News />} />
@@ -34,8 +49,15 @@ function App(props) {
           </Routes>
         </div>
       </div >
-      //</BrowserRouter>
-  );
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  initialized: state.app.initialized
+})
+
+export default compose( 
+  //withRouter,   //обернули в withRouter, т.к. сбивается работа Route - работает не так хорошо. Вроде норм работает и без
+  connect(mapStateToProps, {initializeApp}))(App);
+
