@@ -13,7 +13,6 @@ class ProfileStatus extends React.Component {
          editMode: true
       })
    }
-   //получается, что срабатывает и олдскульный метод с bind выше, и стрелочная ф-ция без bind ниже
 
    deactivateEditMode = () => {  //человек перестал редактировать
       this.setState({  //это асинхронный метод, внутрь к-рого передаем объект, к-рый перезапишет св-ва в локальном state

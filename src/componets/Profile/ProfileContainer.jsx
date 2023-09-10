@@ -10,7 +10,7 @@ import React from 'react';
 class ProfileContainer extends React.Component {
 
    componentDidMount() {
-      debugger
+ 
       //let userId = this.props.match.params.userId; //было так частный случай
       let userId = this.props.router.params.userId;  //более общий случай
 
