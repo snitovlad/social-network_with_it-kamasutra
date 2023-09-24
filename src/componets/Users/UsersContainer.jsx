@@ -12,12 +12,24 @@ class UsersContainer extends React.Component {
    constructor(props) {
       super(props);
    }
+   // componentDidMount() {
+   //    this.props.requestUsers(this.props.currentPage, this.props.pageSize);
+   // }
+
+   //локальная деструктуризация параметров в классовых компонентах внутри метода
    componentDidMount() {
-      this.props.requestUsers(this.props.currentPage, this.props.pageSize);
+      let { currentPage, pageSize } = this.props;
+      this.props.requestUsers(currentPage, pageSize);
    }
 
+   // onPageChanged = (pageNumber) => {
+   //    this.props.requestUsers(pageNumber, this.props.pageSize);
+   // }
+
+   //локальная деструктуризация параметров в классовых компонентах внутри метода
    onPageChanged = (pageNumber) => {
-      this.props.requestUsers(pageNumber, this.props.pageSize);
+      let { pageSize } = this.props;
+      this.props.requestUsers(pageNumber, pageSize);
    }
 
    render() {

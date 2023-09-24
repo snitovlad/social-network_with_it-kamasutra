@@ -1,7 +1,7 @@
 import { authAPI } from "../api/api";
 import { getAuthUserData } from "./auth-reducer";
 
-const INITIALIZED_SUCCESS = 'INITIALIZED_SUCCESS';
+const INITIALIZED_SUCCESS = 'app/INITIALIZED_SUCCESS';
 
 
 let initialState = {
@@ -24,7 +24,7 @@ const appReducer = (state = initialState, action) => {
 export const initializedSuccess = () => ({ type: INITIALIZED_SUCCESS });
 
 export const initializeApp = () => (dispatch) => {
-   let promise = dispatch(getAuthUserData()); //это dispatch асинхронной операции
+   let promise = dispatch(getAuthUserData()); //это dispatch асинхронной операции. Сюда получим promise
 
    /*promise.then(() => {   //это случай, когда есть одна асинхронная операция
       dispatch(initializedSuccess())

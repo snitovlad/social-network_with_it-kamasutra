@@ -19,7 +19,6 @@ export const usersAPI = {  //создали объект с методами д�
 
    unfollow(usersId) {
       return instance.delete(`follow/${usersId}`)
-         .then(response => response.data);  //получилась цепочка promise
    },
 
    follow(usersId) {
