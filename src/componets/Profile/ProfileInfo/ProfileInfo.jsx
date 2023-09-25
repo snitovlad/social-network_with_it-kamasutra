@@ -1,6 +1,7 @@
 import Preloader from '../../common/Preloader/Preloader';
 import { photo } from '../../common/UserPhoto/userPhoto';
 import s from './ProfileInfo.module.css'
+import ProfileStatus from './ProfileStatus';
 import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 
 let ProfileInfo = (props) => {
@@ -21,14 +22,14 @@ let ProfileInfo = (props) => {
             {/* <img src={props.profile.photos.large} alt="photo" /> */}
             <div>Полное имя: {props.profile.fullName}</div>
             <div>------</div>
-            <ProfileStatusWithHooks status={props.status} updateStatus={props.updateStatus} />
+            <ProfileStatus status={props.status} updateStatus={props.updateStatus} />
             <div>------</div>
             <div>Обо мне: {props.profile.aboutMe}</div>
             <div>Контакты: {props.profile.contacts.facebook}</div>
             <div>Контакты: {props.profile.contacts.vk}</div>
             <div>Поиск работы: {props.profile.lookingForAJobDescription}</div>
          </div>
-         
+
       </div>
    );
 }

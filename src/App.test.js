@@ -1,16 +1,19 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
-import { Provider } from 'react-redux';           //обернули, чтобы проходил тест
-import { BrowserRouter } from 'react-router-dom'; //обернули, чтобы проходил тест
+import SamuraiJSApp from './App';
+import { createRoot } from 'react-dom/client';
 
-test('renders learn react link', () => {
-  <BrowserRouter>               //обернули, чтобы проходил тест
-    <Provider >                 //обернули, чтобы проходил тест
-      render(<App />);
-      const linkElement = screen.getByText(/learn react/i);
-      expect(linkElement).toBeInTheDocument();
-    </Provider>
-  </BrowserRouter>
+// test('renders learn react link', () => {
+//       render(<SamuraiJSApp />);
+//       const linkElement = screen.getByText(/learn react/i);
+//       expect(linkElement).toBeInTheDocument();
+  
+// });
+
+test('render without crashing', () => {
+    const container = document.createElement('div');
+    const root = createRoot(container);
+      root.render(<SamuraiJSApp />);
+      root.unmount();  
 });
 
 

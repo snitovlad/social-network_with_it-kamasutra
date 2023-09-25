@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Music from './componets/Music/Music';
 import News from './componets/News/News';
@@ -11,17 +11,18 @@ import UsersContainer from './componets/Users/UsersContainer';
 import ProfileContainer from './componets/Profile/ProfileContainer';
 import HeaderContainer from './componets/Header/HeaderContainer';
 import Login from './componets/Login/Login';
-import {  initializeApp } from '../src/Redux/app-reducer'
-import { connect } from 'react-redux';
+import { initializeApp } from '../src/Redux/app-reducer'
+import { Provider, connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from './hoc/withRouter';
 import Preloader from './componets/common/Preloader/Preloader';
+import store from './Redux/redux-store';
 
 class App extends React.Component {
 
   componentDidMount() {
     this.props.initializeApp();
- }
+  }
 
   render() {
 
@@ -57,7 +58,25 @@ const mapStateToProps = (state) => ({
   initialized: state.app.initialized
 })
 
-export default compose( 
-  //withRouter,   //обернули в withRouter, т.к. сбивается работа Route - работает не так хорошо. Вроде норм работает и без
-  connect(mapStateToProps, {initializeApp}))(App);
+// export default compose( 
+//   withRouter,   //обернули в withRouter, т.к. сбивается работа Route - работает не так хорошо. Вроде норм работает и без
+//   connect(mapStateToProps, {initializeApp}))(App);
+
+//создали условную контейнерную APP компоненту
+let AppContainer = compose(
+  withRouter,   //обернули в withRouter, т.к. сбивается работа Route - работает не так хорошо. Вроде норм работает и без
+  connect(mapStateToProps, { initializeApp }))(App);
+
+//создали другую APP компоненту, которая будет оборачивать у себя все что делается в index.js
+const SamuraiJSApp = (props) => {
+  return <React.StrictMode>
+    <BrowserRouter>
+      <Provider store={store}>  {/*это котекстная компонента, к-рая передает store всем дочерним компонентам App */}
+        <AppContainer />
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>
+};
+
+export default SamuraiJSApp;
 
