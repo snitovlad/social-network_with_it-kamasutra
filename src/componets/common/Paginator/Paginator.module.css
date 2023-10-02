@@ -1,9 +1,26 @@
-.selectedPage {
+.paginator {
+   margin: 20px;
+}
+
+.pageNumber {
+   padding: 2px 5px 2px 5px;
+   border: 1px solid rgb(79, 76, 76);
+   cursor: pointer;
+   line-height: 100%;
+}
+
+.pageNumber.selectedPage {
+   
    font-weight: 800;
    cursor: pointer;
+   border-color: black;
 }
-.noSelectedPage {
-   font-weight: 400;
+.button {
    cursor: pointer;
+   padding: 5px 3px 2px 3px;
+   font-weight: 800;
+}
 
+.pageCount {
+   margin-left: 200px;
 }

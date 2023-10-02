@@ -11,7 +11,7 @@ const TOGGLE_IS_FOLLOWING_PROGRESS = 'users/TOGGLE_IS_FOLLOWING_PROGRESS';
 
 let initialState = {
    users: [],
-   pageSize: 5,
+   pageSize: 10,
    totalUsersCount: 0,
    currentPage: 1,
    isFetching: false,
@@ -23,7 +23,7 @@ const usersReducer = (state = initialState, action) => {
 
       // было одинаковый мапинг и замена в нем нужного объекта. 
       // Написали в helpers.js универсальную утилиту updateObjectInArray
-      
+
       /* case FOLLOW:
           return {
              ...state,
