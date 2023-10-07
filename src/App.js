@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Music from './componets/Music/Music';
 import News from './componets/News/News';
@@ -79,11 +79,11 @@ let AppContainer = compose(
 //создали другую APP компоненту, которая будет оборачивать у себя все что делается в index.js
 const SamuraiJSApp = (props) => {
   return <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter> {/*Сделали HashRouter вместо  BrowserRouter чтобы приложение адекватно вело себя в github pages*/}
       <Provider store={store}>  {/*это котекстная компонента, к-рая передает store всем дочерним компонентам App */}
         <AppContainer />
       </Provider>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 };
 
