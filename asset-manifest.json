@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/social-network_with_it-kamasutra/static/css/main.755e20e4.css",
-    "main.js": "/social-network_with_it-kamasutra/static/js/main.83fce23b.js",
+    "main.js": "/social-network_with_it-kamasutra/static/js/main.607de085.js",
     "static/css/13.d52767cd.chunk.css": "/social-network_with_it-kamasutra/static/css/13.d52767cd.chunk.css",
     "static/js/13.4690319a.chunk.js": "/social-network_with_it-kamasutra/static/js/13.4690319a.chunk.js",
     "static/css/346.cd2fca7f.chunk.css": "/social-network_with_it-kamasutra/static/css/346.cd2fca7f.chunk.css",
@@ -11,7 +11,7 @@
     "static/media/user.png": "/social-network_with_it-kamasutra/static/media/user.3716710954c1faf8ba1a.png",
     "index.html": "/social-network_with_it-kamasutra/index.html",
     "main.755e20e4.css.map": "/social-network_with_it-kamasutra/static/css/main.755e20e4.css.map",
-    "main.83fce23b.js.map": "/social-network_with_it-kamasutra/static/js/main.83fce23b.js.map",
+    "main.607de085.js.map": "/social-network_with_it-kamasutra/static/js/main.607de085.js.map",
     "13.d52767cd.chunk.css.map": "/social-network_with_it-kamasutra/static/css/13.d52767cd.chunk.css.map",
     "13.4690319a.chunk.js.map": "/social-network_with_it-kamasutra/static/js/13.4690319a.chunk.js.map",
     "346.cd2fca7f.chunk.css.map": "/social-network_with_it-kamasutra/static/css/346.cd2fca7f.chunk.css.map",
@@ -20,6 +20,6 @@
   },
   "entrypoints": [
     "static/css/main.755e20e4.css",
-    "static/js/main.83fce23b.js"
+    "static/js/main.607de085.js"
   ]
 }
