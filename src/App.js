@@ -44,8 +44,8 @@ class App extends React.Component {
         <NavbarContainer />
 
         <div className="app-wrapper-content" >
-        {/* Suspense (если не импортировать, то React.Suspense) ожидает, каким способом (ленивым или нет) ему грузить  */}
-           <Suspense fallback={<Preloader />}> 
+          {/* Suspense (если не импортировать, то React.Suspense) ожидает, каким способом (ленивым или нет) ему грузить  */}
+          <Suspense fallback={<Preloader />}>
             <Routes>
               <Route path="/profile/:userId?" element={<ProfileContainer />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
               <Route path="/dialogs/*" element={<DialogsContainer />} />  {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
@@ -79,11 +79,13 @@ let AppContainer = compose(
 //создали другую APP компоненту, которая будет оборачивать у себя все что делается в index.js
 const SamuraiJSApp = (props) => {
   return <React.StrictMode>
-    <HashRouter> {/*Сделали HashRouter вместо  BrowserRouter чтобы приложение адекватно вело себя в github pages*/}
+    <BrowserRouter>
+      {/* <HashRouter> Сделали HashRouter вместо  BrowserRouter чтобы приложение адекватно вело себя в github pages */}
       <Provider store={store}>  {/*это котекстная компонента, к-рая передает store всем дочерним компонентам App */}
         <AppContainer />
       </Provider>
-    </HashRouter>
+      {/* </HashRouter> */}
+    </BrowserRouter>
   </React.StrictMode>
 };
 

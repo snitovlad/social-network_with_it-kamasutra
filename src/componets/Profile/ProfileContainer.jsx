@@ -9,8 +9,7 @@ import React from 'react';
 
 class ProfileContainer extends React.Component {
 
-   componentDidMount() {
- 
+   refreshProfile() { //создали вспомогательный метод, чтобы не было дублирования кода
       //let userId = this.props.match.params.userId; //было так частный случай
       let userId = this.props.router.params.userId;  //более общий случай
 
@@ -25,6 +24,17 @@ class ProfileContainer extends React.Component {
       this.props.getUserProfile(userId);
       //setTimeout (() => {this.props.getStatus(userId);}, 1000)
       this.props.getStatus(userId);
+   }
+
+   componentDidMount() {
+      this.refreshProfile();
+   }
+
+   //устраняем баг, чтобы показывало наш профиль при клике на Profile после перехода от клика по юзеру
+   componentDidUpdate(prevProps, prevState, snapshot) {
+      if (this.props.router.params.userId != prevProps.router.params.userId) { //условие чтобы не было зацикленности
+         this.refreshProfile();
+      }
    }
 
    render() {
