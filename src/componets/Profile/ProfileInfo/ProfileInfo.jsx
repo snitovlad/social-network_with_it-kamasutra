@@ -10,6 +10,13 @@ let ProfileInfo = (props) => {
       return <Preloader />  //не работает с (profile: []) будет ошибка при обращении к вложенному объекту)
    }                          // нужно условие ({props.profile&&props.profile.contacts&&props.profile.contacts.facebook})
 
+   const onMainPhotoSelected = (e) => { //обработчик событий при клике по кнопке file
+      if (e.target.files.length) {  //можно (e.target.files[0])
+         //при клике по кнопке вызываем коллбэк savePhoto. Он передан из ProfileContainer из connect
+         props.savePhoto(e.target.files[0]); 
+      }
+   }
+
    return (
       <div>
 
@@ -20,6 +27,11 @@ let ProfileInfo = (props) => {
          <div className={s.descriptionBlock}>
             {photo(props.profile, 'large')}
             {/* <img src={props.profile.photos.large || userPhoto} alt="photo" /> */}
+            
+            {/* покажем кнопку выбора файла аватарки, если это наш профиль */}
+            <div className={s.addPhotoButton}>
+               {props.isOwner && <input type={"file"} onChange={onMainPhotoSelected} />}
+            </div>
             <div>Полное имя: {props.profile.fullName}</div>
             <div>------</div>
             <ProfileStatusWithHooks status={props.status} updateStatus={props.updateStatus} />

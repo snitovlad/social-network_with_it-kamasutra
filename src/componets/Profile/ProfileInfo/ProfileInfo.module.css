@@ -4,3 +4,14 @@
 .descriptionBlock {
   padding: 10px;
 }
+.addPhotoButton {
+  margin: 10px 0 10px 0;
+
+ 
+
+}
+.addPhotoButton input {
+  padding: 5px;
+  border: 1px solid aquamarine;
+  border-radius: 10px;
+}

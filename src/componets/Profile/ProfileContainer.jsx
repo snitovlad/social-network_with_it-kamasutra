@@ -1,6 +1,6 @@
 import Profile from './Profile';
 import { connect } from 'react-redux';
-import { getUserProfile, getStatus, updateStatus } from '../../Redux/profile-reducer';
+import { getUserProfile, getStatus, updateStatus, savePhoto } from '../../Redux/profile-reducer';
 //import { useParams } from 'react-router-dom'; //import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import { compose } from 'redux';
@@ -39,8 +39,12 @@ class ProfileContainer extends React.Component {
 
    render() {
       return (
-         <Profile {...this.props} profile={this.props.profile}
-            status={this.props.status} updateStatus={this.props.updateStatus} />
+         <Profile {...this.props}
+            isOwner={!this.props.router.params.userId} //если нет id то я собственник - булево значение (для фото аватарки)
+            savePhoto={this.props.savePhoto}
+            profile={this.props.profile}
+            status={this.props.status}
+            updateStatus={this.props.updateStatus} />
       );
    }
 }
@@ -53,7 +57,7 @@ let mapStateToProps = (state) => ({
 })
 
 export default compose(
-   connect(mapStateToProps, { getUserProfile, getStatus, updateStatus }),
+   connect(mapStateToProps, { getUserProfile, getStatus, updateStatus, savePhoto }),
    withRouter, //создали отдельный HOC, в общем не нужен, так есть в withAuthRedirect
    withAuthRedirect //тоже hoc
 )(ProfileContainer)
