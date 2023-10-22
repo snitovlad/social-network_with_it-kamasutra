@@ -80,7 +80,8 @@ let AppContainer = compose(
 const SamuraiJSApp = (props) => {
   return <React.StrictMode>
     <BrowserRouter>
-      {/* <HashRouter> Сделали HashRouter вместо  BrowserRouter чтобы приложение адекватно вело себя в github pages */}
+    {/* Сделали HashRouter вместо  BrowserRouter чтобы приложение адекватно вело себя в github pages */}
+      {/* <HashRouter>  */}
       <Provider store={store}>  {/*это котекстная компонента, к-рая передает store всем дочерним компонентам App */}
         <AppContainer />
       </Provider>

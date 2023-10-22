@@ -1,6 +1,6 @@
 import Profile from './Profile';
 import { connect } from 'react-redux';
-import { getUserProfile, getStatus, updateStatus, savePhoto } from '../../Redux/profile-reducer';
+import { getUserProfile, getStatus, updateStatus, savePhoto, saveProfile, setEditMode } from '../../Redux/profile-reducer';
 //import { useParams } from 'react-router-dom'; //import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import { compose } from 'redux';
@@ -44,7 +44,11 @@ class ProfileContainer extends React.Component {
             savePhoto={this.props.savePhoto}
             profile={this.props.profile}
             status={this.props.status}
-            updateStatus={this.props.updateStatus} />
+            updateStatus={this.props.updateStatus}
+            saveProfile={this.props.saveProfile}
+            error={this.props.error}
+            setEditMode={this.props.setEditMode}
+            editMode={this.props.editMode} />
       );
    }
 }
@@ -53,11 +57,13 @@ let mapStateToProps = (state) => ({
    profile: state.profilePage.profile,
    status: state.profilePage.status,
    authorizedUserId: state.auth.userId,
-   isAuth: state.auth.isAuth
+   isAuth: state.auth.isAuth,
+   error: state.profilePage.error,
+   editMode: state.profilePage.editMode
 })
 
 export default compose(
-   connect(mapStateToProps, { getUserProfile, getStatus, updateStatus, savePhoto }),
+   connect(mapStateToProps, { getUserProfile, getStatus, updateStatus, savePhoto, saveProfile, setEditMode }),
    withRouter, //создали отдельный HOC, в общем не нужен, так есть в withAuthRedirect
    withAuthRedirect //тоже hoc
 )(ProfileContainer)

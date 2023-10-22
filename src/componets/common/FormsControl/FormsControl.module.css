@@ -1,15 +1,7 @@
-.formControl {
 
-}
-
-.formControl.error input, 
-.formControl.error textarea {
-   border: solid 3px red;
-}
-
-.formControl.error {
-   color: red;
-   font-weight: 700;
+.error {
    font-size: 20px;
-   margin: 0 0 10px 0;
-}
+   font-weight: bold;
+   color: red;
+   margin-bottom: 5px; 
+ }

@@ -2,11 +2,14 @@ import { type } from "@testing-library/user-event/dist/type";
 import { profileAPI, usersAPI } from "../api/api";
 
 
+
 const ADD_POST = 'profile/ADD-POST';
 const SET_USER_PROFILE = 'profile/SET_USER_PROFILE';
 const SET_STATUS = 'profile/SET_STATUS';
 const DELETE_POST = 'profile/DELETE_POST';
-const SAVE_PHOTO_SUCCESS = 'profile/SAVE_PHOTO_SUCCESS'
+const SAVE_PHOTO_SUCCESS = 'profile/SAVE_PHOTO_SUCCESS';
+const PROFILE_ERROR_FROM_API = 'profile/PROFILE_ERROR_FROM_API';
+const SET_EDIT_MODE = 'profile/SET_EDIT_MODE'
 
 let initialState = {
    posts:
@@ -16,7 +19,9 @@ let initialState = {
          { id: 3, message: 'I\'m a sportsman. And you?', likeCount: 25, avatar: 'https://sun6-23.userapi.com/s/v1/if1/axZjentIg7fuN9JbKG3sW6Tf3uDApwUE_XzYSuMAbEMue6sJOxRQ6FtVFqqZPO_Q46Ds4ejZ.jpg?size=959x959&quality=96&crop=0,249,959,959&ava=1' }
       ],
    profile: null,
-   status: 'initial status'
+   status: 'initial status',
+   error: null,
+   editMode: false
 }
 
 const profileReducer = (state = initialState, action) => {
@@ -53,6 +58,14 @@ const profileReducer = (state = initialState, action) => {
          return { ...state, status: action.status }
       }
 
+      case PROFILE_ERROR_FROM_API: {
+         return { ...state, error: action.error }
+      }
+
+      case SET_EDIT_MODE: {
+         return { ...state, editMode: action.editMode }
+      }
+
       case SAVE_PHOTO_SUCCESS: {
          return { ...state, profile: {...state.profile,  photos: action.photos} }
       }
@@ -62,12 +75,14 @@ const profileReducer = (state = initialState, action) => {
    }
 }
 
-//export const addPostActionCreate = (newPostText) => ({ type: ADD_POST, newPostText });
-export const addPost = (newPostText) => ({ type: ADD_POST, newPostText }); //переписали в MyPostsContainer без mapDispatchToProps
+export const addPost = (newPostText) => ({ type: ADD_POST, newPostText }); 
 export const deletePost = (postId) => ({ type: DELETE_POST, postId });
+export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
+export const setStatus = (status) => ({ type: SET_STATUS, status });
+export const profileErrorFromApi = (error) => ({ type: PROFILE_ERROR_FROM_API, error }); //получение ошибки с сервера
+export const setEditMode = (editMode) => ({ type: SET_EDIT_MODE, editMode }); //установка режима редактирования
 
-const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
-const setStatus = (status) => ({ type: SET_STATUS, status });
+
 export const setPhotoSuccess = (photos) => ({type: SAVE_PHOTO_SUCCESS, photos});
 
 //было
@@ -102,5 +117,21 @@ export const savePhoto = (file) => async (dispatch) => {
       dispatch(setPhotoSuccess(response.data.data.photos));
    }
 }
+
+export const saveProfile = (profile) => async (dispatch, getState) => { //getState - функция, к-рая позволяет взять state целиком
+   const userId = getState().auth.userId; //взяли текущий userId в отделе .auth
+   const response = await profileAPI.saveProfile(profile);
+   
+   if (response.data.resultCode === 0) {
+      dispatch(getUserProfile(userId));
+      dispatch(profileErrorFromApi(false)); //убираем сообщение об ошибке при успехе
+      dispatch(setEditMode(false)); //выходим из режима редактирования при успехе
+
+
+   } else {
+      dispatch(profileErrorFromApi( response.data.messages[0] ) ) 
+   }
+}
+
 
 export default profileReducer;

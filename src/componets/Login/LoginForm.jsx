@@ -1,13 +1,9 @@
-import { Formik } from "formik";
-import styles from '../common/FormsControl/FormsControl.module.css'
-import {  validationLogin } from "../../utils/validators/validator";
-
+import { Form, Formik } from "formik";
+import * as Yup from 'yup';
+import { MyCheckbox, MyTextInput } from "../common/FormsControl/FormsControl";
+import s from './Login.module.css'
 
 const LoginForm = (props) => {
-
-   let maxLength = 20;
-   let newValue = `email`;
-   let validationPassword = `password`;
 
    /*const submit = (values, { setSubmitting }) => {
       setTimeout(() => {
@@ -17,79 +13,45 @@ const LoginForm = (props) => {
     }*/
 
    return (
-   <div>
-      <Formik
-         initialValues={{
-            email: '',
-            password: '',
-            rememberMe: '',
-         }}
-         validate={(values) => validationLogin(values, maxLength, newValue, validationPassword)}
-         /*onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-            }, 400);
-          }}*/
-          onSubmit={props.submit}
-      >
+      <div className={s.loginForm}>
+         <Formik
+            initialValues={{
+               email: '',
+               password: '',
+               rememberMe: '',
+            }}
 
-         {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, status }) => (
-            <form onSubmit={handleSubmit}>
-               <p className={errors.email && touched.email
-                     ? styles.formControl + ' ' + styles.error
-                     : ''}>
-               <input
-                  type="text"
-                  name="email"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.login}
-                  placeholder="Email"
-               />
-               </p>
+            validationSchema={Yup.object({
+               email: Yup.string()
+                  .email('Invalid email address')
+                  .required('Required'),
+               password: Yup.string()
+                  .max(15, 'Must be 15 characters or less')
+                  .required('Required'),
+               rememberMe: Yup.boolean()
+                       .required('Required')
+                       .oneOf([true], 'You must accept "remember me".')
+            })}
 
-               <div className={styles.formControl + ' ' + styles.error}>
-                     {errors.email && touched.email && errors.email}
-                  </div>
+            onSubmit={props.submit}
+         >
+            <Form className={s.addFormav}>
 
-               <p className={errors.password && touched.password
-                     ? styles.formControl + ' ' + styles.error
-                     : ''}>
-               <input
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.password}
-                  placeholder="Password"
-               />
-               </p>
+               <div>
+                  <MyTextInput label="Email" name="email" type="email" placeholder="Email" />
+               </div>
+               <div>
+                  <MyTextInput label="Password" name="password" type="password" placeholder="Password" />
+               </div>
+               <div>
+               <MyCheckbox name="rememberMe" >remember me</MyCheckbox>
+               </div>
 
-               <div className={styles.formControl + ' ' + styles.error}>
-                     {errors.password && touched.password && errors.password}
-                  </div>
+               <button type="submit" disabled={props.isSubmitting}>Submit</button>
+            </Form>
+         </Formik>
+      </div >
+   )
+}
 
-               <p>
-               <input
-                  type="checkbox"
-                  name="rememberMe"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.checkbox}
-               /> remember me
-               </p>
-
-               {status&&<div className={styles.formControl + ' ' + styles.error}>{status}</div>}
-
-               <button type="submit" disabled={isSubmitting}>
-                  Submit
-               </button>
-            </form>
-         )
-         }
-      </Formik>
-   </div>
-   )}
-
-   export default LoginForm;
+export default LoginForm;

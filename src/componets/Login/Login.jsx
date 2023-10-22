@@ -3,19 +3,19 @@ import LoginForm from './LoginForm';
 import { login } from '../../Redux/auth-reducer';
 import { connect } from 'react-redux';
 import { Navigate} from 'react-router-dom';
-
+import s from './Login.module.css'
 
 const Login = (props) => {
 
    const submit = (values, { setSubmitting, setStatus }) => {
       props.login(values.email, values.password, values.rememberMe, setStatus, setSubmitting);
-      setSubmitting(true);
+      setSubmitting(false);
    }
 
    if (props.isAuth) {
       return <Navigate to = {'/profile'} />
    }
-   return <div>
+   return <div className={s.login}>
       <h1>LOGIN</h1>
       <LoginForm submit={submit} />
    </div>
