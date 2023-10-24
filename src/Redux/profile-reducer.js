@@ -1,5 +1,5 @@
-import { type } from "@testing-library/user-event/dist/type";
 import { profileAPI, usersAPI } from "../api/api";
+import { showGlobalError } from "./app-reducer";
 
 
 
@@ -67,7 +67,7 @@ const profileReducer = (state = initialState, action) => {
       }
 
       case SAVE_PHOTO_SUCCESS: {
-         return { ...state, profile: {...state.profile,  photos: action.photos} }
+         return { ...state, profile: { ...state.profile, photos: action.photos } }
       }
 
       default:
@@ -75,7 +75,7 @@ const profileReducer = (state = initialState, action) => {
    }
 }
 
-export const addPost = (newPostText) => ({ type: ADD_POST, newPostText }); 
+export const addPost = (newPostText) => ({ type: ADD_POST, newPostText });
 export const deletePost = (postId) => ({ type: DELETE_POST, postId });
 export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
 export const setStatus = (status) => ({ type: SET_STATUS, status });
@@ -83,7 +83,7 @@ export const profileErrorFromApi = (error) => ({ type: PROFILE_ERROR_FROM_API, e
 export const setEditMode = (editMode) => ({ type: SET_EDIT_MODE, editMode }); //установка режима редактирования
 
 
-export const setPhotoSuccess = (photos) => ({type: SAVE_PHOTO_SUCCESS, photos});
+export const setPhotoSuccess = (photos) => ({ type: SAVE_PHOTO_SUCCESS, photos });
 
 //было
 // export const getUserProfile = (userId) => (dispatch) => {
@@ -105,9 +105,13 @@ export const getStatus = (userId) => async (dispatch) => {
 }
 
 export const updateStatus = (status) => async (dispatch) => {
-   const response = await profileAPI.updateStatus(status)
-   if (response.data.resultCode === 0) {
-      dispatch(setStatus(status));
+   try {                                            //пытаемся выполнить ЭТОТ код, и если нет то перехватываем ошибку ниже
+      const response = await profileAPI.updateStatus(status)
+      if (response.data.resultCode === 0) {
+         dispatch(setStatus(status));
+      }
+   } catch (error) {                                //перехватываем ошибку
+      dispatch(showGlobalError(error.message))                           
    }
 }
 
@@ -121,7 +125,7 @@ export const savePhoto = (file) => async (dispatch) => {
 export const saveProfile = (profile) => async (dispatch, getState) => { //getState - функция, к-рая позволяет взять state целиком
    const userId = getState().auth.userId; //взяли текущий userId в отделе .auth
    const response = await profileAPI.saveProfile(profile);
-   
+
    if (response.data.resultCode === 0) {
       dispatch(getUserProfile(userId));
       dispatch(profileErrorFromApi(false)); //убираем сообщение об ошибке при успехе
@@ -129,7 +133,7 @@ export const saveProfile = (profile) => async (dispatch, getState) => { //getSta
 
 
    } else {
-      dispatch(profileErrorFromApi( response.data.messages[0] ) ) 
+      dispatch(profileErrorFromApi(response.data.messages[0]))
    }
 }
 

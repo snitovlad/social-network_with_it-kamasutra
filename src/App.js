@@ -11,7 +11,7 @@ import UsersContainer from './componets/Users/UsersContainer';
 //import ProfileContainer from './componets/Profile/ProfileContainer';
 import HeaderContainer from './componets/Header/HeaderContainer';
 import Login from './componets/Login/Login';
-import { initializeApp } from '../src/Redux/app-reducer'
+import { initializeApp, showGlobalError } from '../src/Redux/app-reducer'
 import { Provider, connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from './hoc/withRouter';
@@ -27,9 +27,23 @@ const DialogsContainer = lazy(() => import('./componets/Dialogs/DialogsContainer
 
 class App extends React.Component {
 
-  componentDidMount() {    
+  //метод для отображения отловленной ошибки глобально в приложении
+  //еще почему-то в консоли присутствует какая-то ошибка
+  catchAllUnhandledErrors = (promiseRejectionEvent) => {    //реализовали еще через try-catch в profile-reducer и других
+    this.props.showGlobalError(promiseRejectionEvent.reason.message)
+  }
+
+  componentDidMount() {
     this.props.initializeApp();
-  }  
+
+    //отлавливаем ошибку подписавшись на глобальное событие unhandledrejection
+    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors)  //реализовали в profile-reducer и других
+  }
+
+  //отменяем подписку на глобальное событие unhandledrejection  //реализовали в profile-reducer и других
+  componentWillUnmount() {
+    window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors)
+  }
 
   render() {
 
@@ -40,17 +54,19 @@ class App extends React.Component {
     return (
       < div className="app-wrapper" >
 
+
         <HeaderContainer />
         <NavbarContainer />
 
         <div className="app-wrapper-content" >
+          {this.props.globalError && <div className='show-global-error'>{this.props.globalError}</div>}
           {/* Suspense (если не импортировать, то React.Suspense) ожидает, 
 каким способом (ленивым или нет) ему грузить  */}
           <Suspense fallback={<Preloader />}>
             <Routes>
 
               {/* чтобы главная страничка сразу показывала наш профиль */}
-              <Route  path="/" element={<Navigate to='/profile'/>} />
+              <Route path="/" element={<Navigate to='/profile' />} />
 
               <Route path="/profile/:userId?" element={<ProfileContainer />} />
               <Route path="/dialogs/*" element={<DialogsContainer />} />  {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
@@ -63,7 +79,7 @@ class App extends React.Component {
 
               <Route path="*" element={<div class='error404'>
                 <img src="https://img.freepik.com/free-vector/404-error-with-a-cute-animal-concept-illustration_114360-1900.jpg?w=1480&t=st=1698149752~exp=1698150352~hmac=485f4796d637075afbaab6dd011d57a446ab459be627e0a5a020150773300ec3" />
-                </div>} />
+              </div>} />
             </Routes>
           </Suspense>
         </div>
@@ -73,7 +89,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  initialized: state.app.initialized
+  initialized: state.app.initialized,
+  globalError: state.app.globalError
 })
 
 // export default compose( 
@@ -83,7 +100,7 @@ const mapStateToProps = (state) => ({
 //создали условную контейнерную APP компоненту
 let AppContainer = compose(
   withRouter,   //обернули в withRouter, т.к. сбивается работа Route - работает не так хорошо. Вроде норм работает и без
-  connect(mapStateToProps, { initializeApp }))(App);
+  connect(mapStateToProps, { initializeApp, showGlobalError }))(App);
 
 //создали другую APP компоненту, которая будет оборачивать у себя все что делается в index.js
 const SamuraiJSApp = (props) => {
