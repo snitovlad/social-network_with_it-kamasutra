@@ -19,6 +19,7 @@ const LoginForm = (props) => {
                email: '',
                password: '',
                rememberMe: '',
+               captcha: ''
             }}
 
             validationSchema={Yup.object({
@@ -35,6 +36,7 @@ const LoginForm = (props) => {
 
             onSubmit={props.submit}
          >
+
             <Form className={s.addFormav}>
 
                <div>
@@ -45,10 +47,23 @@ const LoginForm = (props) => {
                </div>
                <div>
                <MyCheckbox name="rememberMe" >remember me</MyCheckbox>
-               </div>
+               </div> 
 
+               {!props.captchaUrl            
+                ? (props.errorMessage ? <div className={s.error}>{props.errorMessage}</div> : null)
+                : null}
+
+               <div>{props.captchaUrl && <img src={props.captchaUrl} />} </div>
+
+               {props.captchaUrl && 
+               <div>
+                  <MyTextInput label="Input symbols from image" name="captcha" type="text" placeholder="symbols from image" />
+               </div>
+}
                <button type="submit" disabled={props.isSubmitting}>Submit</button>
+              
             </Form>
+            
          </Formik>
       </div >
    )

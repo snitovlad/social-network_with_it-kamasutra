@@ -61,21 +61,16 @@ export const authAPI = {  //создали объект с методами дл
       return instance.get(`auth/me`)
          //.then(response => response.data);  //получилась цепочка promise
    },
-   login(email, password, rememberMe=false) {
-      return instance.post(`auth/login`, {email, password, rememberMe});
+   login(email, password, rememberMe=false, captcha=null) {
+      return instance.post(`auth/login`, {email, password, rememberMe, captcha});
    },
    logout() {
       return instance.delete(`auth/login`);
    }
-
 }
 
-/*export const getUsers = (currentPage = 1, pageSize = 10) => {
-   return axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${pageSize}`, 
-   {
-      withCredentials: true
-   })
-   .then(response => {    //можно просто .then(response => response.data) это чтобы избавиться от избытка данных в response
-      return response.data;  //получилась цепочка promise
-   })
-}*/
+export const securityAPI = {
+   getCaptchaUrl() {
+      return instance.get(`security/get-captcha-url`)
+   }
+}

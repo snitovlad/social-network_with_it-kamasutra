@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Music from './componets/Music/Music';
 import News from './componets/News/News';
@@ -27,9 +27,9 @@ const DialogsContainer = lazy(() => import('./componets/Dialogs/DialogsContainer
 
 class App extends React.Component {
 
-  componentDidMount() {
+  componentDidMount() {    
     this.props.initializeApp();
-  }
+  }  
 
   render() {
 
@@ -44,10 +44,15 @@ class App extends React.Component {
         <NavbarContainer />
 
         <div className="app-wrapper-content" >
-          {/* Suspense (если не импортировать, то React.Suspense) ожидает, каким способом (ленивым или нет) ему грузить  */}
+          {/* Suspense (если не импортировать, то React.Suspense) ожидает, 
+каким способом (ленивым или нет) ему грузить  */}
           <Suspense fallback={<Preloader />}>
             <Routes>
-              <Route path="/profile/:userId?" element={<ProfileContainer />} /> {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
+
+              {/* чтобы главная страничка сразу показывала наш профиль */}
+              <Route  path="/" element={<Navigate to='/profile'/>} />
+
+              <Route path="/profile/:userId?" element={<ProfileContainer />} />
               <Route path="/dialogs/*" element={<DialogsContainer />} />  {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
               <Route path="/users" element={<UsersContainer />} />
               <Route path="/news" element={<News />} />
@@ -55,6 +60,10 @@ class App extends React.Component {
               <Route path="/setting" element={<Setting />} />
               <Route path="/friends" element={<FriendsPage />} />
               <Route path="/login" element={<Login />} />
+
+              <Route path="*" element={<div class='error404'>
+                <img src="https://img.freepik.com/free-vector/404-error-with-a-cute-animal-concept-illustration_114360-1900.jpg?w=1480&t=st=1698149752~exp=1698150352~hmac=485f4796d637075afbaab6dd011d57a446ab459be627e0a5a020150773300ec3" />
+                </div>} />
             </Routes>
           </Suspense>
         </div>
@@ -80,9 +89,10 @@ let AppContainer = compose(
 const SamuraiJSApp = (props) => {
   return <React.StrictMode>
     <BrowserRouter>
-    {/* Сделали HashRouter вместо  BrowserRouter чтобы приложение адекватно вело себя в github pages */}
+      {/* Сделали HashRouter вместо  BrowserRouter чтобы приложение адекватно вело себя в github pages */}
       {/* <HashRouter>  */}
-      <Provider store={store}>  {/*это котекстная компонента, к-рая передает store всем дочерним компонентам App */}
+      {/*Provider - это контекстная компонента, к-рая передает store всем дочерним компонентам App, обернутым в connect */}
+      <Provider store={store}>
         <AppContainer />
       </Provider>
       {/* </HashRouter> */}

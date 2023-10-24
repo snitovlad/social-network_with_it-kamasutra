@@ -15,7 +15,9 @@
   background-color: #558bee; 
 }
 
-
+.error404 img {
+  width: 100%;
+}
 /*
 .App {
   text-align: center;

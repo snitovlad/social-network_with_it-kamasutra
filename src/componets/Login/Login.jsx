@@ -8,7 +8,7 @@ import s from './Login.module.css'
 const Login = (props) => {
 
    const submit = (values, { setSubmitting, setStatus }) => {
-      props.login(values.email, values.password, values.rememberMe, setStatus, setSubmitting);
+      props.login(values.email, values.password, values.rememberMe, values.captcha, setStatus, setSubmitting);
       setSubmitting(false);
    }
 
@@ -17,12 +17,14 @@ const Login = (props) => {
    }
    return <div className={s.login}>
       <h1>LOGIN</h1>
-      <LoginForm submit={submit} />
+      <LoginForm submit={submit} errorMessage={props.errorMessage} captchaUrl={props.captchaUrl}/>
    </div>
 }
 
 const mapStateToProps = (state) => ({
-   isAuth: state.auth.isAuth
+   isAuth: state.auth.isAuth,
+   errorMessage: state.auth.errorMessage,
+   captchaUrl: state.auth.captchaUrl
 })
 
 export default connect(mapStateToProps, { login })(Login);
