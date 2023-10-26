@@ -1,7 +1,8 @@
 .nav {
    grid-area: n;
    padding: 20px;
-   background-color: #f0d92a; 
+   background-color: rgb(246, 179, 93); 
+   font-weight: 700;
  }
  
  .item {
@@ -12,7 +13,7 @@
    text-decoration: none;
  }
  .item a.active{
-   color: #026e4e;
+   color: #023f2d;
    font-weight: 700;
  }
  .friends {
