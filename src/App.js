@@ -77,7 +77,7 @@ class App extends React.Component {
               <Route path="/friends" element={<FriendsPage />} />
               <Route path="/login" element={<Login />} />
 
-              <Route path="*" element={<div class='error404'>
+              <Route path="*" element={<div className='error404'>
                 <img src="https://img.freepik.com/free-vector/404-error-with-a-cute-animal-concept-illustration_114360-1900.jpg?w=1480&t=st=1698149752~exp=1698150352~hmac=485f4796d637075afbaab6dd011d57a446ab459be627e0a5a020150773300ec3" />
               </div>} />
             </Routes>
