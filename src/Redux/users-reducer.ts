@@ -1,4 +1,5 @@
 import { usersAPI } from "../api/api";
+import { UsersType } from "../types/types";
 import { updateObjectInArray } from "../utils/objects/helpers";
 
 const FOLLOW = 'users/FOLLOW';
@@ -9,16 +10,18 @@ const SET_USERS_TOTAL_COUNT = 'users/SET_USERS_TOTAL_COUNT';
 const TOGGLE_IS_FETCHING = 'users/TOGGLE_IS_FETCHING';
 const TOGGLE_IS_FOLLOWING_PROGRESS = 'users/TOGGLE_IS_FOLLOWING_PROGRESS';
 
+type InitialStateType = typeof initialState
+
 let initialState = {
-   users: [],
+   users: [] as Array<UsersType>,
    pageSize: 10,
    totalUsersCount: 0,
    currentPage: 1,
    isFetching: false,
-   followingInProgress: []
+   followingInProgress: [] as Array<number>  // array of users id
 }
 
-const usersReducer = (state = initialState, action) => {
+const usersReducer = (state = initialState, action: any): InitialStateType => {
    switch (action.type) {
 
       // было одинаковый мапинг и замена в нем нужного объекта. 
@@ -104,15 +107,36 @@ const usersReducer = (state = initialState, action) => {
    }
 };
 
-const followSuccess = (userId) => ({ type: FOLLOW, userId });  //не экспортируем, т.к. используем здесь же в users-reducer.js
-const unfollowSuccess = (userId) => ({ type: UNFOLLOW, userId });  //не экспортируем, т.к. используем здесь же в users-reducer.js
-const setUsers = (users) => ({ type: SET_USERS, users });  //не экспортируем, т.к. используем здесь же в users-reducer.js
-const setCurrentPage = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage });  //не экспортируем, т.к. используем здесь же в users-reducer.js
-const setUsersTotalCount = (totalUsersCount) => ({ type: SET_USERS_TOTAL_COUNT, count: totalUsersCount });  //не экспортируем, т.к. используем здесь же в users-reducer.js
-const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching });  //не экспортируем, т.к. используем здесь же в users-reducer.js
-const toggleFollowingProgress = (isFetching, userId) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });  //не экспортируем, т.к. используем здесь же в users-reducer.js
+type FollowSuccessActionType = {
+   type: typeof FOLLOW
+   userId: number
+}
+const followSuccess = (userId: number): FollowSuccessActionType => ({ type: FOLLOW, userId });
 
-export const requestUsers = (page, pageSize) => async (dispatch) => {
+type UnfollowSuccessActionType = {
+   type: typeof UNFOLLOW
+   userId: number
+}
+const unfollowSuccess = (userId: number): UnfollowSuccessActionType => ({ type: UNFOLLOW, userId }); 
+type SetUsersActionType = {
+   type: typeof SET_USERS
+   users: UsersType
+}
+const setUsers = (users: UsersType): SetUsersActionType => ({ type: SET_USERS, users });
+type SetCurrentPageActionType = {
+   type: typeof SET_CURRENT_PAGE
+   currentPage: number
+}  
+const setCurrentPage = (currentPage: number): SetCurrentPageActionType => ({ type: SET_CURRENT_PAGE, currentPage }); 
+type SetUsersTotalCountActionType = {
+   type: typeof SET_USERS_TOTAL_COUNT
+   count: number
+}
+const setUsersTotalCount = (totalUsersCount: number): SetUsersTotalCountActionType => ({ type: SET_USERS_TOTAL_COUNT, count: totalUsersCount }); 
+const toggleIsFetching = (isFetching: boolean) => ({ type: TOGGLE_IS_FETCHING, isFetching }); 
+const toggleFollowingProgress = (isFetching: boolean, userId: number) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });  
+
+export const requestUsers = (page: number, pageSize: number) => async (dispatch: any) => {
    dispatch(setCurrentPage(page));  //устанавливает текущую страницу пользователей
    dispatch(toggleIsFetching(true));
    const data = await usersAPI.getUsers(page, pageSize)  //здесь отдельный экземпляр axios для .get
@@ -143,7 +167,7 @@ export const follow = (userId) => async (dispatch) => {
 */
 
 //стало
-const followUnfollowFlow = async (dispatch, userId, apiMethod, actionCreator) => {
+const followUnfollowFlow = async (dispatch: any, userId: number, apiMethod: any, actionCreator: any) => {
    dispatch(toggleFollowingProgress(true, userId)); //деактивируем кнопку после нажатия перед отправкой на сервер
    const response = await apiMethod(userId)  //здесь отдельный экземпляр axios для .delete
    if (response.data.resultCode === 0) {
@@ -152,13 +176,13 @@ const followUnfollowFlow = async (dispatch, userId, apiMethod, actionCreator) =>
    dispatch(toggleFollowingProgress(false, userId)); //активируем кнопку после получения данных с сервера
 }
 
-export const unfollow = (userId) => async (dispatch) => {
+export const unfollow = (userId: any) => async (dispatch: any) => {
    let apiMethod = usersAPI.unfollow.bind(usersAPI);
    let actionCreator = unfollowSuccess;
    followUnfollowFlow(dispatch, userId, apiMethod, actionCreator);
 }
 
-export const follow = (userId) => async (dispatch) => {  //еще сильнее упростили
+export const follow = (userId: number) => async (dispatch: any) => {  //еще сильнее упростили
    followUnfollowFlow(dispatch, userId, usersAPI.follow.bind(usersAPI), followSuccess);
 }
 

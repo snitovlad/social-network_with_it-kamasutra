@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import Preloader from '../../common/Preloader/Preloader';
 import { photo } from '../../common/UserPhoto/userPhoto';
 import s from './ProfileInfo.module.css'
-import ProfileStatus from './ProfileStatus';
 import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 import ProfileDataForm from './ProfileDataForm';
 

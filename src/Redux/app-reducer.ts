@@ -1,16 +1,16 @@
-import { authAPI } from "../api/api";
-import { getAuthUserData } from "./auth-reducer";
+import { getAuthUserData } from "./auth-reducer"
 
 const INITIALIZED_SUCCESS = 'app/INITIALIZED_SUCCESS';
 const SET_GLOBAL_ERROR = 'SET_GLOBAL_ERROR';
 
+type InitialStateType = typeof initialState;
 
 let initialState = {
    initialized: false,
-   globalError: null
+   globalError: null as string | null
 }
 
-const appReducer = (state = initialState, action) => {
+const appReducer = (state = initialState, action: any): InitialStateType => {
    switch (action.type) {
 
       case INITIALIZED_SUCCESS:
@@ -28,10 +28,18 @@ const appReducer = (state = initialState, action) => {
    }
 };
 
-export const initializedSuccess = () => ({ type: INITIALIZED_SUCCESS });
-export const setGlobalError = (globalError) => ({ type: SET_GLOBAL_ERROR, globalError })
+type InitializedSuccessActionType = {
+   type: typeof INITIALIZED_SUCCESS  
+}
+export const initializedSuccess = (): InitializedSuccessActionType => ({ type: INITIALIZED_SUCCESS });
 
-export const initializeApp = () => (dispatch) => {
+type SetGlobalErrorActionType = {
+   type: typeof SET_GLOBAL_ERROR
+   globalError: string | null 
+}
+export const setGlobalError = (globalError: string | null): SetGlobalErrorActionType => ({ type: SET_GLOBAL_ERROR, globalError });
+
+export const initializeApp = () => (dispatch: any) => {
    let promise = dispatch(getAuthUserData()); //это dispatch асинхронной операции. Сюда получим promise
    /*promise.then(() => {   //это случай, когда есть одна асинхронная операция
       dispatch(initializedSuccess())
@@ -42,7 +50,7 @@ export const initializeApp = () => (dispatch) => {
       })
 }
 
-export const showGlobalError = (globalError) => (dispatch) => {
+export const showGlobalError = (globalError: string ) => (dispatch: any) => {
    dispatch(setGlobalError(globalError));
    setTimeout(() => dispatch(setGlobalError(null)), 5000)
 }

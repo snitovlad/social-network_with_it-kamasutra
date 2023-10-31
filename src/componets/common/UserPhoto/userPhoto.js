@@ -5,5 +5,5 @@ export const photo = (user, photoSize) => (
    <img src={user.photos[photoSize] != null
       ? user.photos[photoSize]
       : userPhoto}
-      className={styles.userPhoto + ' ' + styles[photoSize]} alt="photo" />
+      className={styles.userPhoto + ' ' + styles[photoSize]} alt="userPhoto" />
 )

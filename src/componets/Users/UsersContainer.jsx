@@ -9,9 +9,9 @@ import { getCurrentPage, getFollowingInProgress, getIsFetching, getPageSize, get
 
 
 class UsersContainer extends React.Component {
-   constructor(props) {
-      super(props);
-   }
+   // constructor(props) {
+   //    super(props);
+   // }
    // componentDidMount() {
    //    this.props.requestUsers(this.props.currentPage, this.props.pageSize);
    // }

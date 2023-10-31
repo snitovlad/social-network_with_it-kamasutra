@@ -17,31 +17,31 @@ export const usersAPI = {  //создали объект с методами д�
          })
    },
 
-   unfollow(usersId) {
+   unfollow(usersId: any) {
       return instance.delete(`follow/${usersId}`)
    },
 
-   follow(usersId) {
+   follow(usersId: any) {
       return instance.post(`follow/${usersId}`, {}) //не понятно надо ли {} вторым параметром (он не ставил)
    },
    
-   getProfile(userId) {
+   getProfile(userId: any) {
       return profileAPI.getProfile(userId) //делегировали, чтобы не дублировался код ниже, т.к. перенесли
    }
 
 }
 
 export const profileAPI = {
-   getProfile(userId) {
+   getProfile(userId: any) {
       return instance.get(`profile/` + userId);
    },
-   getStatus(userId) {
+   getStatus(userId: any) {
       return instance.get(`profile/status/` + userId);
    },
-   updateStatus(status) {
+   updateStatus(status: any) {
       return instance.put(`profile/status/`, {status: status})
    },
-   savePhoto(photoFile) {
+   savePhoto(photoFile: any) {
       const formData = new FormData();
       formData.append("image", photoFile);
       return instance.put(`profile/photo/`, formData, {
@@ -50,7 +50,7 @@ export const profileAPI = {
          }
       })
    },
-   saveProfile(profile) {
+   saveProfile(profile: any) {
       return instance.put(`profile`, profile)
    }
 
@@ -61,7 +61,7 @@ export const authAPI = {  //создали объект с методами дл
       return instance.get(`auth/me`)
          //.then(response => response.data);  //получилась цепочка promise
    },
-   login(email, password, rememberMe=false, captcha=null) {
+   login(email: string, password: string, rememberMe=false, captcha=null as string | null) {
       return instance.post(`auth/login`, {email, password, rememberMe, captcha});
    },
    logout() {

@@ -1,5 +1,6 @@
 import { profileAPI, usersAPI } from "../api/api";
 import { showGlobalError } from "./app-reducer";
+import { PhotosType, PostsType, ProfileType } from "../types/types"
 
 
 
@@ -11,20 +12,23 @@ const SAVE_PHOTO_SUCCESS = 'profile/SAVE_PHOTO_SUCCESS';
 const PROFILE_ERROR_FROM_API = 'profile/PROFILE_ERROR_FROM_API';
 const SET_EDIT_MODE = 'profile/SET_EDIT_MODE'
 
+
+type InitialStateType = typeof initialState
+
 let initialState = {
    posts:
       [
          { id: 1, message: 'Hi! How are you?', likeCount: 15, avatar: 'https://pixelbox.ru/wp-content/uploads/2021/04/cats-ava-steam-8.jpg' },
          { id: 2, message: 'It\'s my first post', likeCount: 20, avatar: 'https://pixelbox.ru/wp-content/uploads/2022/08/avatars-viber-pixelbox.ru-29.jpg' },
          { id: 3, message: 'I\'m a sportsman. And you?', likeCount: 25, avatar: 'https://sun6-23.userapi.com/s/v1/if1/axZjentIg7fuN9JbKG3sW6Tf3uDApwUE_XzYSuMAbEMue6sJOxRQ6FtVFqqZPO_Q46Ds4ejZ.jpg?size=959x959&quality=96&crop=0,249,959,959&ava=1' }
-      ],
-   profile: null,
+      ] as Array<PostsType>,
+   profile: null as ProfileType | null,
    status: 'initial status',
-   error: null,
+   error: null as string | null,
    editMode: false
 }
 
-const profileReducer = (state = initialState, action) => {
+const profileReducer = (state = initialState, action: any):InitialStateType  => {
    switch (action.type) {
 
       case ADD_POST: {
@@ -67,23 +71,55 @@ const profileReducer = (state = initialState, action) => {
       }
 
       case SAVE_PHOTO_SUCCESS: {
-         return { ...state, profile: { ...state.profile, photos: action.photos } }
+         return { ...state, profile: { ...state.profile, photos: action.photos } as ProfileType } //as ProfileFile временно
       }
 
       default:
          return state;
    }
 }
+type AddPostActionType = {
+   type: typeof ADD_POST
+   newPostText: string
+}
+export const addPost = (newPostText: string): AddPostActionType => ({ type: ADD_POST, newPostText });
 
-export const addPost = (newPostText) => ({ type: ADD_POST, newPostText });
-export const deletePost = (postId) => ({ type: DELETE_POST, postId });
-export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
-export const setStatus = (status) => ({ type: SET_STATUS, status });
-export const profileErrorFromApi = (error) => ({ type: PROFILE_ERROR_FROM_API, error }); //получение ошибки с сервера
-export const setEditMode = (editMode) => ({ type: SET_EDIT_MODE, editMode }); //установка режима редактирования
+type DeletePostActionType = {
+   type: typeof DELETE_POST
+   postId: number
+}
+export const deletePost = (postId: number): DeletePostActionType => ({ type: DELETE_POST, postId });
 
+type SetUserProfileActionType = {
+   type: typeof SET_USER_PROFILE
+   profile: ProfileType
+}
+export const setUserProfile = (profile: ProfileType): SetUserProfileActionType => ({ type: SET_USER_PROFILE, profile });
 
-export const setPhotoSuccess = (photos) => ({ type: SAVE_PHOTO_SUCCESS, photos });
+type SetStatusActionType = {
+   type: typeof SET_STATUS
+   status: string
+}
+export const setStatus = (status: string): SetStatusActionType => ({ type: SET_STATUS, status });
+
+type ProfileErrorFromApiActionType = {
+   type: typeof PROFILE_ERROR_FROM_API
+   error: string | null
+}
+export const profileErrorFromApi = (error: string | null): ProfileErrorFromApiActionType => ({ 
+   type: PROFILE_ERROR_FROM_API, error }); //получение ошибки с сервера
+
+   type SetEditModeActionType = {
+      type: typeof SET_EDIT_MODE
+      editMode: boolean
+   }  
+export const setEditMode = (editMode: boolean): SetEditModeActionType => ({ type: SET_EDIT_MODE, editMode }); //установка режима редактирования
+
+type SetPhotoSuccessActionType = {
+   type: typeof SAVE_PHOTO_SUCCESS
+   photos: PhotosType
+} 
+export const setPhotoSuccess = (photos: PhotosType) => ({ type: SAVE_PHOTO_SUCCESS, photos });
 
 //было
 // export const getUserProfile = (userId) => (dispatch) => {
@@ -94,41 +130,41 @@ export const setPhotoSuccess = (photos) => ({ type: SAVE_PHOTO_SUCCESS, photos }
 // }
 
 //стало
-export const getUserProfile = (userId) => async (dispatch) => {
+export const getUserProfile = (userId: number) => async (dispatch: any) => {
    const response = await usersAPI.getProfile(userId);
    dispatch(setUserProfile(response.data));
 }
 
-export const getStatus = (userId) => async (dispatch) => {
+export const getStatus = (userId: number) => async (dispatch: any) => {
    const response = await profileAPI.getStatus(userId);
    dispatch(setStatus(response.data));
 }
 
-export const updateStatus = (status) => async (dispatch) => {
+export const updateStatus = (status: string) => async (dispatch: any) => {
    try {                                            //пытаемся выполнить ЭТОТ код, и если нет то перехватываем ошибку ниже
       const response = await profileAPI.updateStatus(status)
       if (response.data.resultCode === 0) {
          dispatch(setStatus(status));
       }
-   } catch (error) {                                //перехватываем ошибку
-      dispatch(showGlobalError(error.message))                           
+   } catch (error: any) {                                //перехватываем ошибку
+      dispatch(showGlobalError(error.message))
    }
 }
 
-export const savePhoto = (file) => async (dispatch) => {
+export const savePhoto = (file: any) => async (dispatch: any) => {
    const response = await profileAPI.savePhoto(file);
    if (response.data.resultCode === 0) {
       dispatch(setPhotoSuccess(response.data.data.photos));
    }
 }
 
-export const saveProfile = (profile) => async (dispatch, getState) => { //getState - функция, к-рая позволяет взять state целиком
+export const saveProfile = (profile: ProfileType) => async (dispatch: any, getState: any) => { //getState - функция, к-рая позволяет взять state целиком
    const userId = getState().auth.userId; //взяли текущий userId в отделе .auth
    const response = await profileAPI.saveProfile(profile);
 
    if (response.data.resultCode === 0) {
       dispatch(getUserProfile(userId));
-      dispatch(profileErrorFromApi(false)); //убираем сообщение об ошибке при успехе
+      dispatch(profileErrorFromApi(null)); //убираем сообщение об ошибке при успехе
       dispatch(setEditMode(false)); //выходим из режима редактирования при успехе
 
 

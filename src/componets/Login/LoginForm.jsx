@@ -53,7 +53,7 @@ const LoginForm = (props) => {
                 ? (props.errorMessage ? <div className={s.error}>{props.errorMessage}</div> : null)
                 : null}
 
-               <div>{props.captchaUrl && <img src={props.captchaUrl} />} </div>
+               <div>{props.captchaUrl && <img src={props.captchaUrl} alt="captcha"/>} </div>
 
                {props.captchaUrl && 
                <div>
