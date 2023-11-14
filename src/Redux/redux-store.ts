@@ -7,7 +7,7 @@ import usersReducer from "./users-reducer";
 import authReducer from "./auth-reducer";
 import appReducer from "./app-reducer";
 
-let reducers = combineReducers({
+let rootReducers = combineReducers({
    profilePage: profileReducer,
    dialogsPage: dialogsReducer,
    sidebar: sidebarReducer,
@@ -16,9 +16,15 @@ let reducers = combineReducers({
    app: appReducer
 })
 
+type RootReducersType = typeof rootReducers;
+export type AppStateType = ReturnType<RootReducersType>; //вычленили тип AppStateType из типа RootReducersType
+
+//@ts-ignore 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; //это включает расширение для хрома для redux
 
-let store = legacy_createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));  //можно просто thunk вместо thunkMiddleware
+let store = legacy_createStore(rootReducers, composeEnhancers(applyMiddleware(thunkMiddleware)));  //можно просто thunk вместо thunkMiddleware
 
 export default store;
+
+//@ts-ignore чтобы компилятор TypeScript игнорировал строку ниже
 window.store = store;

@@ -1,9 +1,16 @@
 import styles from './Users.module.css'
 import { NavLink } from 'react-router-dom';
 import { photo } from '../common/UserPhoto/userPhoto';
+import { UserType } from '../../types/types';
 
+type PropsType = {
+   user: UserType
+   followingInProgress: Array<number>
+   follow: (userId: number) => void
+   unfollow: (userId: number) => void
+}
 //вместо пропсов сделали деструктуризацию параметров. Можно в конце на всякий случай добавить ...props
-let User = ({ user, followingInProgress, follow, unfollow }) => {
+let User: React.FC<PropsType> = ({ user, followingInProgress, follow, unfollow }) => {
 
    return (
       <div className={styles.user}>

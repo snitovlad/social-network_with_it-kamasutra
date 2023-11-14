@@ -1,5 +1,5 @@
 import { usersAPI } from "../api/api";
-import { UsersType } from "../types/types";
+import { UserType } from "../types/types";
 import { updateObjectInArray } from "../utils/objects/helpers";
 
 const FOLLOW = 'users/FOLLOW';
@@ -13,7 +13,7 @@ const TOGGLE_IS_FOLLOWING_PROGRESS = 'users/TOGGLE_IS_FOLLOWING_PROGRESS';
 type InitialStateType = typeof initialState
 
 let initialState = {
-   users: [] as Array<UsersType>,
+   users: [] as Array<UserType>,
    pageSize: 10,
    totalUsersCount: 0,
    currentPage: 1,
@@ -120,9 +120,9 @@ type UnfollowSuccessActionType = {
 const unfollowSuccess = (userId: number): UnfollowSuccessActionType => ({ type: UNFOLLOW, userId }); 
 type SetUsersActionType = {
    type: typeof SET_USERS
-   users: UsersType
+   users: UserType
 }
-const setUsers = (users: UsersType): SetUsersActionType => ({ type: SET_USERS, users });
+const setUsers = (users: UserType): SetUsersActionType => ({ type: SET_USERS, users });
 type SetCurrentPageActionType = {
    type: typeof SET_CURRENT_PAGE
    currentPage: number

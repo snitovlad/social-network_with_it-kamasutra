@@ -70,7 +70,7 @@ class App extends React.Component {
 
               <Route path="/profile/:userId?" element={<ProfileContainer />} />
               <Route path="/dialogs/*" element={<DialogsContainer />} />  {/*зведочка * для нестрогого указания пути. Дальше может быть что-то еще */}
-              <Route path="/users" element={<UsersContainer />} />
+              <Route path="/users" element={<UsersContainer pageTitle={"Samurai"}/>} />
               <Route path="/news" element={<News />} />
               <Route path="/music" element={<Music />} />
               <Route path="/setting" element={<Setting />} />
