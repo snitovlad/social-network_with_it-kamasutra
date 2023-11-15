@@ -1,4 +1,7 @@
+import { ThunkAction } from "redux-thunk";
 import { getAuthUserData } from "./auth-reducer"
+import { AppStateType } from "./redux-store";
+import { Dispatch } from "redux";
 
 const INITIALIZED_SUCCESS = 'app/INITIALIZED_SUCCESS';
 const SET_GLOBAL_ERROR = 'SET_GLOBAL_ERROR';
@@ -10,7 +13,7 @@ let initialState = {
    globalError: null as string | null
 }
 
-const appReducer = (state = initialState, action: any): InitialStateType => {
+const appReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
    switch (action.type) {
 
       case INITIALIZED_SUCCESS:
@@ -28,6 +31,8 @@ const appReducer = (state = initialState, action: any): InitialStateType => {
    }
 };
 
+type ActionsTypes = InitializedSuccessActionType | SetGlobalErrorActionType
+
 type InitializedSuccessActionType = {
    type: typeof INITIALIZED_SUCCESS  
 }
@@ -39,7 +44,11 @@ type SetGlobalErrorActionType = {
 }
 export const setGlobalError = (globalError: string | null): SetGlobalErrorActionType => ({ type: SET_GLOBAL_ERROR, globalError });
 
-export const initializeApp = () => (dispatch: any) => {
+
+//type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes> //типизация thunk из redux
+
+
+export const initializeApp = () => (dispatch: any) => {  // не получается типизировать
    let promise = dispatch(getAuthUserData()); //это dispatch асинхронной операции. Сюда получим promise
    /*promise.then(() => {   //это случай, когда есть одна асинхронная операция
       dispatch(initializedSuccess())
@@ -50,7 +59,7 @@ export const initializeApp = () => (dispatch: any) => {
       })
 }
 
-export const showGlobalError = (globalError: string ) => (dispatch: any) => {
+export const showGlobalError = (globalError: string ) => (dispatch: Dispatch<ActionsTypes>) => {
    dispatch(setGlobalError(globalError));
    setTimeout(() => dispatch(setGlobalError(null)), 5000)
 }

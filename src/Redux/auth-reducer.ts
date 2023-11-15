@@ -1,4 +1,7 @@
+import { ThunkAction } from "redux-thunk";
 import { authAPI, securityAPI } from "../api/api";
+import { AppStateType } from "./redux-store";
+import { Dispatch } from "redux";
 
 const SET_AUTH_USER_DATA = 'auth/SET_AUTH_USER_DATA';
 const GET_CAPTCHA_URL_SUCCESS = 'auth/GET_CAPTCHA_URL_SUCCESS';
@@ -15,7 +18,7 @@ let initialState = {
    captchaUrl: null as string | null
 }
 
-const authReducer = (state = initialState, action: any): InitialStateType => {
+const authReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
    switch (action.type) {
 
       case SET_AUTH_USER_DATA:
@@ -30,6 +33,8 @@ const authReducer = (state = initialState, action: any): InitialStateType => {
          return state;
    }
 };
+
+type ActionsTypes = SetAuthUserDataActionType | GetCaptchaUrlSuccessActionType | GetLoginErrorFromApiActionType
 
 type SetAuthUserDataActionPayloadType = {
    userId: number | null
@@ -77,8 +82,12 @@ const getLoginErrorFromApi = (errorMessage: string | null): GetLoginErrorFromApi
 //       })
 // }
 
+
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes> //типизация thunk из redux
+
+
 //стало c async await
-export const getAuthUserData = () => async (dispatch: any) => {
+export const getAuthUserData = (): ThunkType => async (dispatch) => {
    const response = await authAPI.me()
    if (response.data.resultCode === 0) {
       let { id, login, email } = response.data.data;
@@ -87,7 +96,7 @@ export const getAuthUserData = () => async (dispatch: any) => {
 }
 
 export const login = (email: string, password: string, rememberMe: boolean, captcha: string,
-   setStatus: any, setSubmitting: any) => async (dispatch: any) => { //это thunkCreator для логинизации
+   setStatus: any, setSubmitting: any): ThunkType => async (dispatch) => { //это thunkCreator для логинизации
       const response = await authAPI.login(email, password, rememberMe, captcha)  //здесь отдельный экземпляр axios для .post
       if (response.data.resultCode === 0) {  //если все хорошо (мы залогинились) - 
          dispatch(getAuthUserData()) //опять запрашиваем запрос на аутентификацию, чтобы прошел поток получения информации обо мне
@@ -107,13 +116,13 @@ export const login = (email: string, password: string, rememberMe: boolean, capt
       setSubmitting(false);
    }
 
-export const getCaptchaUrl = () => async (dispatch: any) => { //это thunkCreator для логинизации
+export const getCaptchaUrl = (): ThunkType => async (dispatch) => { //это thunkCreator для логинизации
    const response = await securityAPI.getCaptchaUrl()  //здесь отдельный экземпляр axios для .post
    const captchaUrl = response.data.url;
    dispatch(getCaptchaUrlSuccess(captchaUrl))
 }
 
-export const logout = () => async (dispatch: any) => { //это thunkCreator для вылогинизации
+export const logout = (): ThunkType => async (dispatch) => { //это thunkCreator для вылогинизации
    const response = await authAPI.logout()  //здесь отдельный экземпляр axios для .post
    if (response.data.resultCode === 0) {
       dispatch(setAuthUserData(null, null, null, false)) //обнулили все при вылогинизации

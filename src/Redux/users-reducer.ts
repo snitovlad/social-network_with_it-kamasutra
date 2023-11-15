@@ -1,6 +1,9 @@
+import { Dispatch } from "redux";
 import { usersAPI } from "../api/api";
 import { UserType } from "../types/types";
 import { updateObjectInArray } from "../utils/objects/helpers";
+import { AppStateType } from "./redux-store";
+import { ThunkAction } from "redux-thunk";
 
 const FOLLOW = 'users/FOLLOW';
 const UNFOLLOW = 'users/UNFOLLOW';
@@ -21,7 +24,7 @@ let initialState = {
    followingInProgress: [] as Array<number>  // array of users id
 }
 
-const usersReducer = (state = initialState, action: any): InitialStateType => {
+const usersReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
    switch (action.type) {
 
       // было одинаковый мапинг и замена в нем нужного объекта. 
@@ -107,6 +110,9 @@ const usersReducer = (state = initialState, action: any): InitialStateType => {
    }
 };
 
+type ActionsTypes = FollowSuccessActionType | UnfollowSuccessActionType | SetUsersActionType | SetCurrentPageActionType
+   | SetUsersTotalCountActionType | ToggleIsFetchingActionType | ToggleFollowingProgressActionType;
+
 type FollowSuccessActionType = {
    type: typeof FOLLOW
    userId: number
@@ -118,25 +124,43 @@ type UnfollowSuccessActionType = {
    userId: number
 }
 const unfollowSuccess = (userId: number): UnfollowSuccessActionType => ({ type: UNFOLLOW, userId }); 
+
 type SetUsersActionType = {
    type: typeof SET_USERS
-   users: UserType
+   users: Array<UserType>
 }
-const setUsers = (users: UserType): SetUsersActionType => ({ type: SET_USERS, users });
+const setUsers = (users: Array<UserType>): SetUsersActionType => ({ type: SET_USERS, users });
+
 type SetCurrentPageActionType = {
    type: typeof SET_CURRENT_PAGE
    currentPage: number
 }  
 const setCurrentPage = (currentPage: number): SetCurrentPageActionType => ({ type: SET_CURRENT_PAGE, currentPage }); 
+
 type SetUsersTotalCountActionType = {
    type: typeof SET_USERS_TOTAL_COUNT
    count: number
 }
-const setUsersTotalCount = (totalUsersCount: number): SetUsersTotalCountActionType => ({ type: SET_USERS_TOTAL_COUNT, count: totalUsersCount }); 
-const toggleIsFetching = (isFetching: boolean) => ({ type: TOGGLE_IS_FETCHING, isFetching }); 
-const toggleFollowingProgress = (isFetching: boolean, userId: number) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });  
+const setUsersTotalCount = (totalUsersCount: number): SetUsersTotalCountActionType => ({ 
+   type: SET_USERS_TOTAL_COUNT, count: totalUsersCount }); 
 
-export const requestUsers = (page: number, pageSize: number) => async (dispatch: any) => {
+type ToggleIsFetchingActionType = {
+   type: typeof TOGGLE_IS_FETCHING
+   isFetching: boolean
+}
+const toggleIsFetching = (isFetching: boolean):ToggleIsFetchingActionType => ({ type: TOGGLE_IS_FETCHING, isFetching }); 
+
+type ToggleFollowingProgressActionType = {
+   type: typeof TOGGLE_IS_FOLLOWING_PROGRESS
+   isFetching: boolean
+   userId: number
+}
+const toggleFollowingProgress = (isFetching: boolean, userId: number):ToggleFollowingProgressActionType => ({ 
+   type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });  
+
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes> //типизация thunk из redux
+
+export const requestUsers = (page: number, pageSize: number): ThunkType => async (dispatch) => {
    dispatch(setCurrentPage(page));  //устанавливает текущую страницу пользователей
    dispatch(toggleIsFetching(true));
    const data = await usersAPI.getUsers(page, pageSize)  //здесь отдельный экземпляр axios для .get
@@ -166,8 +190,9 @@ export const follow = (userId) => async (dispatch) => {
 }
 */
 
-//стало
-const followUnfollowFlow = async (dispatch: any, userId: number, apiMethod: any, actionCreator: any) => {
+//стало (ввели ф-цию для внутреннего пользования)
+const _followUnfollowFlow = async (dispatch: Dispatch<ActionsTypes>, userId: number, apiMethod: any, 
+   actionCreator: (userId: number) => FollowSuccessActionType | UnfollowSuccessActionType) => {
    dispatch(toggleFollowingProgress(true, userId)); //деактивируем кнопку после нажатия перед отправкой на сервер
    const response = await apiMethod(userId)  //здесь отдельный экземпляр axios для .delete
    if (response.data.resultCode === 0) {
@@ -176,14 +201,14 @@ const followUnfollowFlow = async (dispatch: any, userId: number, apiMethod: any,
    dispatch(toggleFollowingProgress(false, userId)); //активируем кнопку после получения данных с сервера
 }
 
-export const unfollow = (userId: any) => async (dispatch: any) => {
+export const unfollow = (userId: number): ThunkType => async (dispatch) => {
    let apiMethod = usersAPI.unfollow.bind(usersAPI);
    let actionCreator = unfollowSuccess;
-   followUnfollowFlow(dispatch, userId, apiMethod, actionCreator);
+   _followUnfollowFlow(dispatch, userId, apiMethod, actionCreator);
 }
 
-export const follow = (userId: number) => async (dispatch: any) => {  //еще сильнее упростили
-   followUnfollowFlow(dispatch, userId, usersAPI.follow.bind(usersAPI), followSuccess);
+export const follow = (userId: number): ThunkType => async (dispatch) => {  //еще сильнее упростили
+   _followUnfollowFlow(dispatch, userId, usersAPI.follow.bind(usersAPI), followSuccess);
 }
 
 

@@ -1,6 +1,8 @@
 import { profileAPI, usersAPI } from "../api/api";
 import { showGlobalError } from "./app-reducer";
 import { PhotosType, PostsType, ProfileType } from "../types/types"
+import { ThunkAction } from "redux-thunk";
+import { AppStateType } from "./redux-store";
 
 
 
@@ -28,7 +30,7 @@ let initialState = {
    editMode: false
 }
 
-const profileReducer = (state = initialState, action: any):InitialStateType  => {
+const profileReducer = (state = initialState, action: ActionsTypes):InitialStateType  => {
    switch (action.type) {
 
       case ADD_POST: {
@@ -78,6 +80,10 @@ const profileReducer = (state = initialState, action: any):InitialStateType  => 
          return state;
    }
 }
+
+type ActionsTypes = AddPostActionType | DeletePostActionType | SetUserProfileActionType | SetStatusActionType
+                  | ProfileErrorFromApiActionType | SetEditModeActionType | SetPhotoSuccessActionType
+
 type AddPostActionType = {
    type: typeof ADD_POST
    newPostText: string
@@ -129,18 +135,21 @@ export const setPhotoSuccess = (photos: PhotosType) => ({ type: SAVE_PHOTO_SUCCE
 //       })
 // }
 
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes> //типизация thunk из redux
+
+
 //стало
-export const getUserProfile = (userId: number) => async (dispatch: any) => {
+export const getUserProfile = (userId: number | null):ThunkType => async (dispatch) => {
    const response = await usersAPI.getProfile(userId);
    dispatch(setUserProfile(response.data));
 }
 
-export const getStatus = (userId: number) => async (dispatch: any) => {
+export const getStatus = (userId: number):ThunkType => async (dispatch) => {
    const response = await profileAPI.getStatus(userId);
    dispatch(setStatus(response.data));
 }
 
-export const updateStatus = (status: string) => async (dispatch: any) => {
+export const updateStatus = (status: string):ThunkType => async (dispatch) => {
    try {                                            //пытаемся выполнить ЭТОТ код, и если нет то перехватываем ошибку ниже
       const response = await profileAPI.updateStatus(status)
       if (response.data.resultCode === 0) {
@@ -151,14 +160,14 @@ export const updateStatus = (status: string) => async (dispatch: any) => {
    }
 }
 
-export const savePhoto = (file: any) => async (dispatch: any) => {
+export const savePhoto = (file: any) => async (dispatch: any) => { //не работает типизация thunk
    const response = await profileAPI.savePhoto(file);
    if (response.data.resultCode === 0) {
       dispatch(setPhotoSuccess(response.data.data.photos));
    }
 }
 
-export const saveProfile = (profile: ProfileType) => async (dispatch: any, getState: any) => { //getState - функция, к-рая позволяет взять state целиком
+export const saveProfile = (profile: ProfileType):ThunkType => async (dispatch, getState) => { //getState - функция, к-рая позволяет взять state целиком
    const userId = getState().auth.userId; //взяли текущий userId в отделе .auth
    const response = await profileAPI.saveProfile(profile);
 

@@ -1,5 +1,3 @@
-import { type } from "os"
-
 type FriendsType = {
    id: number
    name: string
