@@ -1,4 +1,5 @@
-import axios from "axios";
+import { ProfileType } from './../types/types';
+import axios, { AxiosResponse } from "axios";
 
 const instance = axios.create({  //создали отдельный экземпляр axios и настроили его
    withCredentials: true,  //благодаря этому цепляется cookie с локального хоста на другой домен
@@ -17,28 +18,28 @@ export const usersAPI = {  //создали объект с методами д�
          })
    },
 
-   unfollow(usersId: any) {
-      return instance.delete(`follow/${usersId}`)
+   unfollow(userId: number) {
+      return instance.delete(`follow/${userId}`)
    },
 
-   follow(usersId: any) {
-      return instance.post(`follow/${usersId}`, {}) //не понятно надо ли {} вторым параметром (он не ставил)
+   follow(userId: number) {
+      return instance.post(`follow/${userId}`, {}) //не понятно надо ли {} вторым параметром (он не ставил)
    },
    
-   getProfile(userId: any) {
+   getProfile(userId: number | null) {
       return profileAPI.getProfile(userId) //делегировали, чтобы не дублировался код ниже, т.к. перенесли
    }
 
 }
 
 export const profileAPI = {
-   getProfile(userId: any) {
+   getProfile(userId: number | null) {
       return instance.get(`profile/` + userId);
    },
-   getStatus(userId: any) {
+   getStatus(userId: number) {
       return instance.get(`profile/status/` + userId);
    },
-   updateStatus(status: any) {
+   updateStatus(status: string) {
       return instance.put(`profile/status/`, {status: status})
    },
    savePhoto(photoFile: any) {
@@ -50,22 +51,56 @@ export const profileAPI = {
          }
       })
    },
-   saveProfile(profile: any) {
+   saveProfile(profile: ProfileType) {
       return instance.put(`profile`, profile)
    }
 
 }
 
+export enum ResultCodesEnum {
+   Success = 0,
+   Error = 1
+}
+
+export enum ResultCodeForCaptchaEnum {
+   CaptchaIsRequired = 10
+}
+
+type MeResponseType = {
+   data: {
+      id: number
+      email: string
+      login: string
+   }
+   resultCode: ResultCodesEnum
+   messages: Array<string>
+}
+
+type LoginResponseType = {
+   resultCode: ResultCodesEnum | ResultCodeForCaptchaEnum
+   messages: Array<string>
+   data: {
+      userId: number
+   }
+}
+
+type LogoutResponseType = {
+   resultCode: ResultCodesEnum 
+   messages: Array<string>
+   data: {}
+}
+
 export const authAPI = {  //создали объект с методами для axios
    me() {
-      return instance.get(`auth/me`)
-         //.then(response => response.data);  //получилась цепочка promise
+      return instance.get<MeResponseType>(`auth/me`).then(res => res.data)
+         //.then(response => response.data);  //чтобы не отдавать в BLL избыточные данные из DAL
    },
-   login(email: string, password: string, rememberMe=false, captcha=null as string | null) {
-      return instance.post(`auth/login`, {email, password, rememberMe, captcha});
+   login(email: string, password: string, rememberMe=false, captcha: string | null = null) {
+      return instance.post<LoginResponseType>(`auth/login`, {email, password, rememberMe, captcha})
+      .then(res => res.data);
    },
    logout() {
-      return instance.delete(`auth/login`);
+      return instance.delete<LogoutResponseType>(`auth/login`).then(res => res.data);
    }
 }
 

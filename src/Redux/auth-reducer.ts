@@ -1,5 +1,5 @@
 import { ThunkAction } from "redux-thunk";
-import { authAPI, securityAPI } from "../api/api";
+import { ResultCodeForCaptchaEnum, ResultCodesEnum, authAPI, securityAPI } from "../api/api";
 import { AppStateType } from "./redux-store";
 import { Dispatch } from "redux";
 
@@ -88,22 +88,22 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
 //стало c async await
 export const getAuthUserData = (): ThunkType => async (dispatch) => {
-   const response = await authAPI.me()
-   if (response.data.resultCode === 0) {
-      let { id, login, email } = response.data.data;
+   const meData = await authAPI.me()
+   if (meData.resultCode === ResultCodesEnum.Success) {
+      let { id, login, email } = meData.data;
       dispatch(setAuthUserData(id, login, email, true)) //очередность как в actionCreator setAuthUserData
    }
 }
 
 export const login = (email: string, password: string, rememberMe: boolean, captcha: string,
    setStatus: any, setSubmitting: any): ThunkType => async (dispatch) => { //это thunkCreator для логинизации
-      const response = await authAPI.login(email, password, rememberMe, captcha)  //здесь отдельный экземпляр axios для .post
-      if (response.data.resultCode === 0) {  //если все хорошо (мы залогинились) - 
+      const loginData = await authAPI.login(email, password, rememberMe, captcha)  //здесь отдельный экземпляр axios для .post
+      if (loginData.resultCode === ResultCodesEnum.Success) {  //если все хорошо (мы залогинились) - 
          dispatch(getAuthUserData()) //опять запрашиваем запрос на аутентификацию, чтобы прошел поток получения информации обо мне
          dispatch(getLoginErrorFromApi(null)) //обнуляем ошибку с сервера
          dispatch(getCaptchaUrlSuccess(null)) //обнуляем url капчи
       } else {
-         if (response.data.resultCode === 10) { //если пришла ошибка 10, то выведем капчу
+         if (loginData.resultCode === ResultCodeForCaptchaEnum.CaptchaIsRequired) { //если пришла ошибка 10, то выведем капчу
             dispatch(getCaptchaUrl());
          }
          // let message = response.data.messages.length > 0 //проверка если messages пустой
@@ -111,7 +111,7 @@ export const login = (email: string, password: string, rememberMe: boolean, capt
          //    : 'Some error';
          // setStatus(message); эта штука как-то не работает
 
-         dispatch(getLoginErrorFromApi(response.data.messages[0]))
+         dispatch(getLoginErrorFromApi(loginData.messages[0]))
       };
       setSubmitting(false);
    }
@@ -123,8 +123,8 @@ export const getCaptchaUrl = (): ThunkType => async (dispatch) => { //это thu
 }
 
 export const logout = (): ThunkType => async (dispatch) => { //это thunkCreator для вылогинизации
-   const response = await authAPI.logout()  //здесь отдельный экземпляр axios для .post
-   if (response.data.resultCode === 0) {
+   const logoutData = await authAPI.logout()  //здесь отдельный экземпляр axios для .post
+   if (logoutData.resultCode === ResultCodesEnum.Success) {
       dispatch(setAuthUserData(null, null, null, false)) //обнулили все при вылогинизации
    }
 }
